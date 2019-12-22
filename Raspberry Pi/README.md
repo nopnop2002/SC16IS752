@@ -8,6 +8,12 @@ Connect TX and RX with a short wire
 
 __Connections should be as short as possible__
 
+```
+sudo ./sc16is750_selftest I2C i2c_address
+
+sudo ./sc16is750_selftest SPI chip_select_gpio
+```
+
 ![sc16is750-selftest](https://user-images.githubusercontent.com/6020549/71321397-f8ee9d00-24fb-11ea-8a50-662e032d4c87.jpg)
 
 ---
@@ -15,12 +21,6 @@ __Connections should be as short as possible__
 ## sc16is750_receive
 
 Connect RX and TX of other computer at any baud rate   
-
-```
-sudo ./sc16is750_selftest I2C i2c_address
-
-sudo ./sc16is750_selftest SPI chip_select_gpio
-```
 
 __Connections should be as short as possible__
 
