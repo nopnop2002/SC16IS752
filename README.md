@@ -1,5 +1,5 @@
 # SC16IS752
-SC16IS752 Driver for Arduino/ESP8266/RaspberryPi
+SC16IS750/752 Driver for Arduino/ESP8266/RaspberryPi
 
 ![SC16IS752-2](https://user-images.githubusercontent.com/6020549/71316920-4d722800-24bc-11ea-93dc-627e2a2cc1c0.JPG)
 
@@ -9,7 +9,7 @@ SC16IS752 Driver for Arduino/ESP8266/RaspberryPi
 
 # for i2c
 
-|SC16IS752||Arduino/ESP8266/Rpi|
+|SC16IS750/752||Arduino/ESP8266/Rpi|
 |:-:|:-:|:-:|
 |VCC|--|5V|
 |GND|--|GND|
@@ -29,7 +29,7 @@ SC16IS752 Driver for Arduino/ESP8266/RaspberryPi
 
 # for SPI
 
-|SC16IS752||Arduino/ESP8266/Rpi|
+|SC16IS750/752||Arduino/ESP8266/Rpi|
 |:-:|:-:|:-:|
 |VCC|--|5V|
 |GND|--|GND|
