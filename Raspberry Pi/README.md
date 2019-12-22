@@ -21,7 +21,7 @@ __Connections should be as short as possible__
 
 ### Sketch of the other side
 ```
-#define baudrate 9600L
+#define baudrate 115200L
 
 void setup() {
   Serial.begin(baudrate);
