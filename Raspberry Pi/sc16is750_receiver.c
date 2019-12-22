@@ -42,7 +42,7 @@ int main(int argc, char **argv){
 	SC16IS750_begin(&dev, baudrate, 14745600UL); //baudrate&frequency setting
 	if (SC16IS750_ping(&dev)!=1) {
 		printf("device not found\n");
-		while(1);
+		return 1;
 	} else {
 		printf("device found\n");
 	}

@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <wiringPi.h>
+#include <signal.h>
+#include <stdbool.h>
 #include "sc16is750.h"
 
 //Connect TX and RX with a wire
@@ -10,10 +12,10 @@ int main(int argc, char **argv){
 
 	SC16IS750_t dev;
 	
-	if (argc < 4) {
+	if (argc < 3) {
 		printf("USAGE:\n");
-		printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
-		printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
+		printf("\t%s I2C i2c_address : For I2C\n", argv[0]);
+		printf("\t%s SPI chip_select : For SPI\n", argv[0]);
 		return 1;
 	}
 	
@@ -27,8 +29,8 @@ int main(int argc, char **argv){
 		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select);
 	} else {
 		printf("USAGE:\n");
-		printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
-		printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
+		printf("\t%s I2C i2c_address : For I2C\n", argv[0]);
+		printf("\t%s SPI chip_select : For SPI\n", argv[0]);
 		return 1;
 	}
 
@@ -39,12 +41,10 @@ int main(int argc, char **argv){
     }
 
 	// SC16IS750 Initialization
-	long baudrate = strtol(argv[3], NULL, 10);
-	printf("baudrate=%ld\n", baudrate);
-	SC16IS750_begin(&dev, baudrate, 14745600UL); //baudrate&frequency setting
+	SC16IS750_begin(&dev, SC16IS750_DEFAULT_SPEED, 14745600UL); //baudrate&frequency setting
 	if (SC16IS750_ping(&dev)!=1) {
 		printf("device not found\n");
-		while(1);
+		return 1;
 	} else {
 		printf("device found\n");
 	}
@@ -56,7 +56,7 @@ int main(int argc, char **argv){
 		while(SC16IS750_available(&dev, SC16IS750_CHANNEL)==0);
 		if (SC16IS750_read(&dev, SC16IS750_CHANNEL)!=0x55) {
 			printf("serial communication error\n");
-			while(1);
+			break;
 		}	
 		delay(200);
 
@@ -64,7 +64,7 @@ int main(int argc, char **argv){
 		while(SC16IS750_available(&dev, SC16IS750_CHANNEL)==0);
 		if (SC16IS750_read(&dev, SC16IS750_CHANNEL)!=0xAA) {
 			printf("serial communication error\n");
-			while(1);
+			break;
 		}	
 		delay(200);
 	}
