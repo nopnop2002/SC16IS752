@@ -1,4 +1,4 @@
-# I2C_GPIO
+# SPI_GPIO
 
 Connect GPIO0 and LED   
 
