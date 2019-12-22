@@ -5,6 +5,9 @@ Connect RX(B-CH) and other Arduno TX at 384000 bps
 
 __Connections should be as short as possible__
 
+# Channel baudrate
+You can specify different baudrates for channel A and channel B
+
 # Sketch of the other side
 ```
 #define baudrate 9600L

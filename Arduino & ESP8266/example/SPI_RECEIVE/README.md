@@ -1,9 +1,12 @@
-# I2C_RECEIVE
+# I2C_SELFTEST
 
-Connect RX(A-CH) and other Arduno TX at 9600 bps   
-Connect RX(B-CH) and other Arduno TX at 384000 bps   
+Connect TX(A-CH) and RX(B-CH) with a short wire   
+Connect TX(B-CH) and RX(A-CH) with a short wire   
 
 __Connections should be as short as possible__
+
+# Channel baudrate
+You can specify different baudrates for channel A and channel B
 
 # Sketch of the other side
 ```
