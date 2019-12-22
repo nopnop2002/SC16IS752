@@ -5,6 +5,7 @@ Driver for SC16IS752
 
 ![SC16IS752-1](https://user-images.githubusercontent.com/6020549/71316919-4d722800-24bc-11ea-96c7-85b5d014bfe0.JPG)
 
+---
 
 # for i2c
 
@@ -24,8 +25,9 @@ Driver for SC16IS752
 (*1)i2c address selection   
 (*2)Requires PullUp
 
+---
 
-## for SPI
+# for SPI
 
 |SC16IS752||Arduino/ESP8266/Rpi|
 |:-:|:-:|:-:|
@@ -40,6 +42,3 @@ Driver for SC16IS752
 |SCL/SCLK|--|SCK|
 |SDA/VSS|--|GND|
 
----
-
-# for Raspberry Pi
