@@ -2,11 +2,11 @@
 
 ![sc16is750](https://user-images.githubusercontent.com/6020549/71318319-a056da00-24d2-11ea-902f-5fba0e077e05.jpg)
 
+---
 
 ## sc16is750_selftest
 
-Connect TX(A-CH) and RX(B-CH) with a short wire   
-Connect TX(B-CH) and RX(A-CH) with a short wire   
+Connect TX and RX with a short wire   
 
 __Connections should be as short as possible__
 
@@ -14,13 +14,10 @@ __Connections should be as short as possible__
 
 ## sc16is750_receive
 
-Connect RX(A-CH) and other Arduno TX at 9600 bps   
-Connect RX(B-CH) and other Arduno TX at 384000 bps   
+Connect RX and TX of other computer at any baud rate   
 
 __Connections should be as short as possible__
 
-### Channel baudrate
-You can specify different baudrates for channel A and channel B
 
 ### Sketch of the other side
 ```

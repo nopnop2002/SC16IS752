@@ -46,17 +46,14 @@ int main(int argc, char **argv){
 	} else {
 		printf("device found\n");
 	}
-	printf("start serial communication\n");
 
 	int gpio = 0;
-	while(1) {
-		SC16IS750_pinMode(&dev, gpio, OUTPUT);
+	SC16IS750_pinMode(&dev, gpio, OUTPUT);
+	while (1) {
 		SC16IS750_digitalWrite(&dev, gpio, HIGH);
 		delay(1000);
 		SC16IS750_digitalWrite(&dev, gpio, LOW);
 		delay(1000);
-		gpio++;
-		if (gpio == 8) gpio = 0;
 	}
 }
 
