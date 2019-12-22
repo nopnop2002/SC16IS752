@@ -1,5 +1,6 @@
 # SC16IS752
-SC16IS750/752 Driver for ATmega328/ESP8266/RaspberryPi
+SC16IS752 Driver for ATmega328/ESP8266   
+SC16IS750/752 Driver for RaspberryPi
 
 ![SC16IS752-2](https://user-images.githubusercontent.com/6020549/71316920-4d722800-24bc-11ea-93dc-627e2a2cc1c0.JPG)
 
