@@ -1,5 +1,7 @@
 # SC16IS750 Driver for RaspberryPi
 
+14.7456MHz crystal is used for SC16IS750   
+
 ![SC16IS750](https://user-images.githubusercontent.com/6020549/71384102-bd022780-2622-11ea-8f5a-25f2fd733f19.JPG)
 
 ---
@@ -67,6 +69,8 @@ sudo ./sc16is750_gpio SPI chip_select_gpio
 ---
 
 # SC16IS752 Driver for RaspberryPi
+
+1.8432Mhz crystal is used for SC16IS752   
 
 ![SC16IS752-1](https://user-images.githubusercontent.com/6020549/71384120-e327c780-2622-11ea-8b85-b35da2f9deaa.JPG)
 

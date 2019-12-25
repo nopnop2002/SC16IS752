@@ -24,7 +24,7 @@ SC16IS750/752 Driver for RaspberryPi
 |SDA/VSS|--|SDA(*2)|SDA(*3)|
 
 (*1)i2c address selection   
-(*2)Requires PullUp
+(*2)Requires PullUp   
 (*3)No Requires PullUp
 
 ---
