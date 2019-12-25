@@ -178,9 +178,16 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 
 	//divisor = (SC16IS750_CRYSTCAL_FREQ/prescaler)/(baudrate*16);
 	uint32_t divisor1 = dev->crystal_freq/prescaler;
+    //printf("divisor1=%d\n",divisor1);
 	uint32_t divisor2 = baudrate*16;
+    //printf("divisor2=%d\n",divisor2);
 	//divisor = (dev->crystal_freq/prescaler)/(baudrate*16);
+    if (divisor2 > divisor1) {
+		printf("This baudrate (%d) is not support\n",baudrate);
+		return 0;
+	}
 	divisor = divisor1/divisor2;
+    //printf("baudrate=%d divisor=%d\n",baudrate,divisor);
 
 	temp_lcr = SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_LCR);
 	temp_lcr |= 0x80;
