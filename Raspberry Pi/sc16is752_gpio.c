@@ -36,8 +36,8 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
-	// SC16IS750 Initialization
-	SC16IS750_begin(&dev, SC16IS750_DEFAULT_SPEED, 14745600UL); //baudrate&frequency setting
+	// SC16IS752 Initialization
+	SC16IS752_begin(&dev, SC16IS750_DEFAULT_SPEED, SC16IS750_DEFAULT_SPEED, 1843200UL); //baudrate&frequency setting
 	if (SC16IS750_ping(&dev)!=1) {
 		printf("device not found\n");
 		return 1;

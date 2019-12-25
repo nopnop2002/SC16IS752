@@ -12,7 +12,7 @@ void setup()
     Serial.begin(115200);
     Serial.println("Start testing");
     // UART to Serial Bridge Initialization
-    i2cuart.begin(9600, 9600);               //baudrate setting
+    i2cuart.begin(SC16IS752_DEFAULT_SPEED, SC16IS752_DEFAULT_SPEED); //baudrate setting
     if (i2cuart.ping()!=1) {
         Serial.println("Device not found");
         while(1);

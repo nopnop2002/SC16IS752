@@ -61,8 +61,7 @@ void SC16IS752::begin(uint32_t baud_A, uint32_t baud_B)
 		SPI.begin();
 		//SPI.setClockDivider(32);
 	};
-    ResetDevice(SC16IS752_CHANNEL_A);
-    ResetDevice(SC16IS752_CHANNEL_B);
+    ResetDevice();
     FIFOEnable(SC16IS752_CHANNEL_A, 1);
     FIFOEnable(SC16IS752_CHANNEL_B, 1);
 	SetBaudrate(SC16IS752_CHANNEL_A, baud_A);
@@ -265,14 +264,14 @@ void SC16IS752::GPIOSetPinMode(uint8_t pin_number, uint8_t i_o)
 {
     uint8_t temp_iodir;
 
-    temp_iodir = ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IODIR);
+    temp_iodir = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR);
     if ( i_o == OUTPUT ) {
       temp_iodir |= (0x01 << pin_number);
     } else {
       temp_iodir &= (uint8_t)~(0x01 << pin_number);
     }
 
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IODIR, temp_iodir);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR, temp_iodir);
     return;
 }
 
@@ -280,14 +279,14 @@ void SC16IS752::GPIOSetPinState(uint8_t pin_number, uint8_t pin_state)
 {
     uint8_t temp_iostate;
 
-    temp_iostate = ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOSTATE);
+    temp_iostate = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
     if ( pin_state == 1 ) {
       temp_iostate |= (0x01 << pin_number);
     } else {
       temp_iostate &= (uint8_t)~(0x01 << pin_number);
     }
 
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOSTATE, temp_iostate);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, temp_iostate);
     return;
 }
 
@@ -296,7 +295,7 @@ uint8_t SC16IS752::GPIOGetPinState(uint8_t pin_number)
 {
     uint8_t temp_iostate;
 
-    temp_iostate = ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOSTATE);
+    temp_iostate = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
     if ( temp_iostate & (0x01 << pin_number)== 0 ) {
       return 0;
     }
@@ -306,35 +305,35 @@ uint8_t SC16IS752::GPIOGetPinState(uint8_t pin_number)
 uint8_t SC16IS752::GPIOGetPortState(void)
 {
 
-    return ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOSTATE);
+    return ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
 
 }
 
 void SC16IS752::GPIOSetPortMode(uint8_t port_io)
 {
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IODIR, port_io);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR, port_io);
     return;
 }
 
 void SC16IS752::GPIOSetPortState(uint8_t port_state)
 {
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOSTATE, port_state);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, port_state);
     return;
 }
 
 void SC16IS752::SetPinInterrupt(uint8_t io_int_ena)
 {
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOINTENA, io_int_ena);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOINTENA, io_int_ena);
     return;
 }
 
-void SC16IS752::ResetDevice(uint8_t channel)
+void SC16IS752::ResetDevice()
 {
     uint8_t reg;
 
-    reg = ReadRegister(channel, SC16IS750_REG_IOCONTROL);
+    reg = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
     reg |= 0x08;
-    WriteRegister(channel, SC16IS750_REG_IOCONTROL, reg);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, reg);
 
     return;
 }
@@ -343,13 +342,13 @@ void SC16IS752::ModemPin(uint8_t gpio) //gpio == 0, gpio[7:4] are modem pins, gp
 {
     uint8_t temp_iocontrol;
 
-    temp_iocontrol = ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOCONTROL);
+    temp_iocontrol = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
     if ( gpio == 0 ) {
         temp_iocontrol |= 0x02;
     } else {
         temp_iocontrol &= 0xFD;
     }
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOCONTROL, temp_iocontrol);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
 
     return;
 }
@@ -358,13 +357,13 @@ void SC16IS752::GPIOLatch(uint8_t latch)
 {
     uint8_t temp_iocontrol;
 
-    temp_iocontrol = ReadRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOCONTROL);
+    temp_iocontrol = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
     if ( latch == 0 ) {
         temp_iocontrol &= 0xFE;
     } else {
         temp_iocontrol |= 0x01;
     }
-    WriteRegister(SC16IS752_CHANNEL_A, SC16IS750_REG_IOCONTROL, temp_iocontrol);
+    WriteRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
 
     return;
 }

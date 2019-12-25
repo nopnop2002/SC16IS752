@@ -34,11 +34,11 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
-    // wiringPi Initialization
-    if(wiringPiSetupGpio() == -1) {
-        printf("wiringPiSetupGpio Fail\n");
-        return 1;
-    }
+	// wiringPi Initialization
+	if(wiringPiSetupGpio() == -1) {
+		printf("wiringPiSetupGpio Fail\n");
+		return 1;
+	}
 
 	// SC16IS750 Initialization
 	SC16IS750_begin(&dev, SC16IS750_DEFAULT_SPEED, 14745600UL); //baudrate&frequency setting

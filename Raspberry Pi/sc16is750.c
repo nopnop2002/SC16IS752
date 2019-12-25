@@ -59,7 +59,7 @@ void SC16IS750_begin(SC16IS750_t * dev, uint32_t baud, long crystal_freq)
 		wiringPiSPISetup(dev->spi_channel, 4*1000*1000);
 		digitalWrite(dev->device_address_sspin, LOW);
 	};
-	SC16IS750_ResetDevice(dev, SC16IS750_CHANNEL);
+	SC16IS750_ResetDevice(dev);
 	SC16IS750_FIFOEnable(dev, SC16IS750_CHANNEL, 1);
 	SC16IS750_SetBaudrate(dev, SC16IS750_CHANNEL, baud);
 	SC16IS750_SetLine(dev, SC16IS750_CHANNEL, 8, 0, 1);
@@ -74,16 +74,14 @@ void SC16IS752_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long c
 		pinMode(dev->device_address_sspin, OUTPUT);
 		digitalWrite(dev->device_address_sspin, HIGH);
 		dev->spi_channel = 0;
-		wiringPiSPISetup(dev->spi_channel, 16*1000*1000);
+		wiringPiSPISetup(dev->spi_channel, 4*1000*1000);
 	};
-	SC16IS750_ResetDevice(dev, SC16IS752_CHANNEL_A);
+	SC16IS750_ResetDevice(dev);
 	SC16IS750_FIFOEnable(dev, SC16IS752_CHANNEL_A, 1);
-	SC16IS750_SetBaudrate(dev, SC16IS752_CHANNEL_A, baud_A);
-	SC16IS750_SetLine(dev, SC16IS752_CHANNEL_A, 8, 0, 1);
-
-	SC16IS750_ResetDevice(dev, SC16IS752_CHANNEL_B);
 	SC16IS750_FIFOEnable(dev, SC16IS752_CHANNEL_B, 1);
+	SC16IS750_SetBaudrate(dev, SC16IS752_CHANNEL_A, baud_A);
 	SC16IS750_SetBaudrate(dev, SC16IS752_CHANNEL_B, baud_B);
+	SC16IS750_SetLine(dev, SC16IS752_CHANNEL_A, 8, 0, 1);
 	SC16IS750_SetLine(dev, SC16IS752_CHANNEL_B, 8, 0, 1);
 }
 
@@ -126,20 +124,21 @@ uint8_t SC16IS750_digitalRead(SC16IS750_t * dev, uint8_t pin)
 uint8_t SC16IS750_ReadRegister(SC16IS750_t * dev, uint8_t channel, uint8_t reg_addr)
 {
 	uint8_t result;
-    //printf("ReadRegister channel=%d reg_addr=%x\n",channel, (reg_addr<<3 | channel<<1));
+	//printf("ReadRegister channel=%d reg_addr=%x\n",channel, (reg_addr<<3 | channel<<1));
 	if ( dev->protocol == SC16IS750_PROTOCOL_I2C ) {	// register read operation via I2C
 		result = wiringPiI2CReadReg8(dev->i2c_fd, (reg_addr<<3 | channel<<1));
+		//printf("result=0x%x\n",result);
 	} else if (dev->protocol == SC16IS750_PROTOCOL_SPI) {	//register read operation via SPI
 		digitalWrite(dev->device_address_sspin, LOW);
 		delayMicroseconds(10);
 		unsigned char spi_data[2];
 		spi_data[0] = 0x80|(reg_addr<<3 | channel<<1);
 		spi_data[1] = 0xff;
-        //printf("spi_data[in]=0x%x 0x%x\n",spi_data[0],spi_data[1]);
+		//printf("spi_data[in]=0x%x 0x%x\n",spi_data[0],spi_data[1]);
 		wiringPiSPIDataRW(dev->spi_channel, spi_data, 2);
 		delayMicroseconds(10);
 		digitalWrite(dev->device_address_sspin, HIGH);
-        //printf("spi_data[out]=0x%x 0x%x\n",spi_data[0],spi_data[1]);
+		//printf("spi_data[out]=0x%x 0x%x\n",spi_data[0],spi_data[1]);
 		result = spi_data[1];
 	}
 	return result;
@@ -148,7 +147,7 @@ uint8_t SC16IS750_ReadRegister(SC16IS750_t * dev, uint8_t channel, uint8_t reg_a
 
 void SC16IS750_WriteRegister(SC16IS750_t * dev, uint8_t channel, uint8_t reg_addr, uint8_t val)
 {
-    //printf("WriteRegister channel=%d reg_addr=%x val=%x\n",channel, (reg_addr<<3 | channel<<1), val);
+	//printf("WriteRegister channel=%d reg_addr=%x val=%x\n",channel, (reg_addr<<3 | channel<<1), val);
 	if ( dev->protocol == SC16IS750_PROTOCOL_I2C ) {	// register read operation via I2C
 		wiringPiI2CWriteReg8(dev->i2c_fd, (reg_addr<<3 | channel<<1), val);
 	} else {
@@ -178,7 +177,10 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 	}
 
 	//divisor = (SC16IS750_CRYSTCAL_FREQ/prescaler)/(baudrate*16);
-	divisor = (dev->crystal_freq/prescaler)/(baudrate*16);
+	uint32_t divisor1 = dev->crystal_freq/prescaler;
+	uint32_t divisor2 = baudrate*16;
+	//divisor = (dev->crystal_freq/prescaler)/(baudrate*16);
+	divisor = divisor1/divisor2;
 
 	temp_lcr = SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_LCR);
 	temp_lcr |= 0x80;
@@ -192,7 +194,12 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 
 
 	//actual_baudrate = (SC16IS750_CRYSTCAL_FREQ/prescaler)/(16*divisor);
-	actual_baudrate = (dev->crystal_freq/prescaler)/(16*divisor);
+	divisor1 = dev->crystal_freq/prescaler;
+	//printf("divisor1=%d\n",divisor1);
+	divisor2 = 16*divisor;
+	//printf("divisor2=%d\n",divisor2);
+	//actual_baudrate = (dev->crystal_freq/prescaler)/(16*divisor);
+	actual_baudrate = divisor1 / divisor2;
 	error = ((float)actual_baudrate-baudrate)*1000/baudrate;
 #ifdef	SC16IS750_DEBUG_PRINT
 	printf("Desired baudrate: ");
@@ -327,13 +334,13 @@ void SC16IS750_SetPinInterrupt(SC16IS750_t * dev, uint8_t io_int_ena)
 	return;
 }
 
-void SC16IS750_ResetDevice(SC16IS750_t * dev, uint8_t channel)
+void SC16IS750_ResetDevice(SC16IS750_t * dev)
 {
 	uint8_t reg;
 
-	reg = SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_IOCONTROL);
+	reg = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
 	reg |= 0x08;
-	SC16IS750_WriteRegister(dev, channel, SC16IS750_REG_IOCONTROL, reg);
+	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, reg);
 
 	return;
 }

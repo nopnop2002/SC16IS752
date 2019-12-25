@@ -2,7 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <wiringPi.h>
+#include <signal.h>
+#include <stdbool.h>
 #include "sc16is750.h"
+
+//Connect TX and RX with a wire
 
 int main(int argc, char **argv){
 
@@ -31,27 +35,38 @@ int main(int argc, char **argv){
 	}
 
 	// wiringPi Initialization
-	if(wiringPiSetup() == -1) {
-		printf("wiringPiSetup Fail\n");
+	if(wiringPiSetupGpio() == -1) {
+		printf("wiringPiSetupGpio Fail\n");
 		return 1;
 	}
 
-	// SC16IS750 Initialization
-	SC16IS750_begin(&dev, SC16IS750_DEFAULT_SPEED, 14745600UL); //baudrate&frequency setting
+	// SC16IS752 Initialization
+	SC16IS752_begin(&dev, SC16IS750_DEFAULT_SPEED, SC16IS750_DEFAULT_SPEED, 1843200UL); //baudrate&frequency setting
 	if (SC16IS750_ping(&dev)!=1) {
 		printf("device not found\n");
 		return 1;
 	} else {
 		printf("device found\n");
 	}
+	printf("start serial communication\n");
 
-	int gpio = 0;
-	SC16IS750_pinMode(&dev, gpio, OUTPUT);
-	while (1) {
-		SC16IS750_digitalWrite(&dev, gpio, HIGH);
-		delay(1000);
-		SC16IS750_digitalWrite(&dev, gpio, LOW);
-		delay(1000);
+
+	while(1) {
+		SC16IS750_write(&dev, SC16IS752_CHANNEL_A, 0x55);
+		while(SC16IS750_available(&dev, SC16IS752_CHANNEL_B)==0);
+		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_B)!=0x55) {
+			printf("serial communication error\n");
+			break;
+		}	
+		delay(200);
+
+		SC16IS750_write(&dev, SC16IS752_CHANNEL_B, 0xAA);
+		while(SC16IS750_available(&dev, SC16IS752_CHANNEL_A)==0);
+		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_A)!=0xAA) {
+			printf("serial communication error\n");
+			break;
+		}	
+		delay(200);
 	}
 }
 

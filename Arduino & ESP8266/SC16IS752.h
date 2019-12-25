@@ -100,14 +100,15 @@ Please keep the above information when you use this code in your project.
 //#define     SC16IS750_CRYSTCAL_FREQ (14745600UL) 
 #define 	SC16IS750_CRYSTCAL_FREQ (1843200UL)	  
 //#define     SC16IS750_CRYSTCAL_FREQ (16000000UL)    
-//#define     SC16IS750_DEBUG_PRINT   (1)
+#define     SC16IS750_DEBUG_PRINT   (1)
 #define     SC16IS750_PROTOCOL_I2C  (0)
 #define     SC16IS750_PROTOCOL_SPI  (1)
 
-#define     SC16IS752_CHANNEL_A 					0x00
-#define     SC16IS752_CHANNEL_B 					0x01
+#define     SC16IS752_CHANNEL_A 		0x00
+#define     SC16IS752_CHANNEL_B 		0x01
+#define     SC16IS752_CHANNEL_BOTH 		0x00
 
-
+#define     SC16IS752_DEFAULT_SPEED		9600
 
 //class SC16IS752 : public Stream
 class SC16IS752
@@ -148,7 +149,7 @@ class SC16IS752
         uint8_t GPIOGetPinState(uint8_t pin_number);
         void    GPIOSetPortMode(uint8_t port_io);
         void    GPIOSetPortState(uint8_t port_state);
-        void    ResetDevice(uint8_t channel);
+        void    ResetDevice();
         
         
         

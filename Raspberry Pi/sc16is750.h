@@ -74,7 +74,7 @@
 //#define	SC16IS750_CRYSTCAL_FREQ (14745600UL) 
 //#define	SC16IS750_CRYSTCAL_FREQ (1843200UL)   
 //#define	SC16IS750_CRYSTCAL_FREQ (16000000UL)	  
-//#define	SC16IS750_DEBUG_PRINT   (0)
+//#define	SC16IS750_DEBUG_PRINT	(0)
 #define		SC16IS750_PROTOCOL_I2C	(0)
 #define		SC16IS750_PROTOCOL_SPI	(1)
 
@@ -93,7 +93,7 @@ typedef struct {
 	uint8_t protocol;
 	int peek_buf;
 	uint8_t peek_flag;
-    long crystal_freq;
+	long crystal_freq;
 	//uint32_t timeout;
 } SC16IS750_t;
 
@@ -101,7 +101,7 @@ typedef struct {
 	void	SC16IS750_begin(SC16IS750_t * dev, uint32_t baud, long crystal_freq);				 
 	void	SC16IS752_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long crystal_freq);		 
 	int		SC16IS750_read(SC16IS750_t * dev, uint8_t channel);
-	void  	SC16IS750_write(SC16IS750_t * dev, uint8_t channel, uint8_t val);
+	void	SC16IS750_write(SC16IS750_t * dev, uint8_t channel, uint8_t val);
 	int		SC16IS750_available(SC16IS750_t * dev, uint8_t channel);
 	void	SC16IS750_pinMode(SC16IS750_t * dev, uint8_t pin, uint8_t io);
 	void	SC16IS750_digitalWrite(SC16IS750_t * dev, uint8_t pin, uint8_t value);
@@ -128,7 +128,7 @@ typedef struct {
 	uint8_t	SC16IS750_GPIOGetPinState(SC16IS750_t * dev, uint8_t pin_number);
 	void		SC16IS750_GPIOSetPortMode(SC16IS750_t * dev, uint8_t port_io);
 	void		SC16IS750_GPIOSetPortState(SC16IS750_t * dev, uint8_t port_state);
-	void		SC16IS750_ResetDevice(SC16IS750_t * dev, uint8_t channel);
+	void		SC16IS750_ResetDevice(SC16IS750_t * dev);
 	
 	void		SC16IS750_isr(SC16IS750_t * dev, uint8_t channel);
 	void		SC16IS750_FIFOEnable(SC16IS750_t * dev, uint8_t channel, uint8_t fifo_enable);

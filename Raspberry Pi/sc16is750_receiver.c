@@ -9,9 +9,9 @@ int main(int argc, char **argv){
 	SC16IS750_t dev;
 	
 	if (argc < 4) {
-        printf("USAGE:\n");
-        printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
-        printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
+		printf("USAGE:\n");
+		printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
+		printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
 		return 1;
 	}
 	
@@ -23,16 +23,16 @@ int main(int argc, char **argv){
 		long chip_select = strtol(argv[2], NULL, 10);
 		printf("chip_select=%ld\n", chip_select);
 		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select);
-    } else {
-        printf("USAGE:\n");
-        printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
-        printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
-        return 1;
+	} else {
+		printf("USAGE:\n");
+		printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
+		printf("\t%s SPI chip_select baudrate : For SPI\n", argv[0]);
+		return 1;
 	}
 
 	// wiringPi Initialization
 	if(wiringPiSetup() == -1) {
-    	printf("wiringPiSetup Fail\n");
+		printf("wiringPiSetup Fail\n");
 		return 1;
 	}
 
