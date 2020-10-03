@@ -12,18 +12,23 @@ SC16IS750/752 Driver for RaspberryPi
 
 |SC16IS750/752||ATmega328/ESP8266|RPi|
 |:-:|:-:|:-:|:-:|
-|VCC|--|5V|5V|
+|VCC|--|5V(*1)|5V(*1)|
 |GND|--|GND|GND|
 |RESET|--|N/C|N/C|
-|A0/CS|--|5V(*1)|5V(*1)|
-|A1/SI|--|5V(*1)|5V(*1)|
+|A0/CS|--|5V(*2)|5V(*2)|
+|A1/SI|--|5V(*2)|5V(*2)|
 |NC/SO|--|N/C|N/C|
 |IRQ|--|N/C|N/C|
 |I2C/SPI|--|5V|5V|
-|SCL/SCLK|--|SCL(*2)|SCL(*3)|
-|SDA/VSS|--|SDA(*2)|SDA(*3)|
+|SCL/SCLK|--|SCL(*3)|SCL(*4)|
+|SDA/VSS|--|SDA(*3)|SDA(*4)|
 
-(*1)i2c address selection   
+(*1)
+The SC16IS750 module is equipped with a MIC5219 LG33 regulator, which provides 3.3V to the chip.   
+The SC16IS752 module is equipped with a AMSD1117-3.3 regulator, which provides 3.3V to the chip.   
+Therefore, the level of i2c is 3.3V.   
+
+(*2)i2c address selection   
 |A0|A1|Address|
 |:-:|:-:|:-:|
 |Vdd|Vdd|0x90|
@@ -31,8 +36,8 @@ SC16IS750/752 Driver for RaspberryPi
 |Vss|Vdd|0x98|
 |Vss|Vss|0x9A|
 
-(*2)Requires PullUp   
-(*3)No Requires PullUp
+(*3)Requires PullUp   
+(*4)No Requires PullUp
 
 ---
 
@@ -40,7 +45,7 @@ SC16IS750/752 Driver for RaspberryPi
 
 |SC16IS750/752||ATmega328/ESP8266/Rpi|
 |:-:|:-:|:-:|
-|VCC|--|5V|
+|VCC|--|5V(*1)|
 |GND|--|GND|
 |RESET|--|N/C|
 |A0/CS|--|CS|
@@ -50,4 +55,9 @@ SC16IS750/752 Driver for RaspberryPi
 |I2C/SPI|--|GND|
 |SCL/SCLK|--|SCK|
 |SDA/VSS|--|GND|
+
+(*1)
+The SC16IS750 module is equipped with a MIC5219 LG33 regulator, which provides 3.3V to the chip.   
+The SC16IS752 module is equipped with a AMSD1117-3.3 regulator, which provides 3.3V to the chip.   
+Therefore, the level of SPI is 3.3V.   
 
