@@ -25,6 +25,7 @@ SC16IS750/752 Driver for RaspberryPi
 
 (*1)i2c address selection   
 |A0|A1|Address|
+|:-:|:-:|:-:|
 |Vdd|Vdd|0x90|
 |Vdd|Vss|0x92|
 |Vss|Vdd|0x98|
