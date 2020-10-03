@@ -24,8 +24,8 @@ SC16IS750/752 Driver for RaspberryPi
 |SDA/VSS|--|SDA(*3)|SDA(*4)|
 
 (*1)
-The SC16IS750 module is equipped with a MIC5219 LG33 regulator, which provides 3.3V to the chip.   
-The SC16IS752 module is equipped with a AMS1117-3.3 regulator, which provides 3.3V to the chip.   
+The SC16IS750 module is equipped with a MIC5219 LG33 voltage regulator, which provides 3.3V to the chip.   
+The SC16IS752 module is equipped with a AMS1117-3.3 voltage regulator, which provides 3.3V to the chip.   
 Therefore, the level of i2c is 3.3V.   
 
 (*2)i2c address selection   
@@ -37,7 +37,7 @@ Therefore, the level of i2c is 3.3V.
 |Vss|Vss|0x9A|
 
 (*3)Requires PullUp   
-(*4)No Requires PullUp
+(*4)No Requires PullUp   
 
 ---
 
@@ -57,7 +57,7 @@ Therefore, the level of i2c is 3.3V.
 |SDA/VSS|--|GND|
 
 (*1)
-The SC16IS750 module is equipped with a MIC5219 LG33 regulator, which provides 3.3V to the chip.   
-The SC16IS752 module is equipped with a AMS1117-3.3 regulator, which provides 3.3V to the chip.   
+The SC16IS750 module is equipped with a MIC5219 LG33 voltage regulator, which provides 3.3V to the chip.   
+The SC16IS752 module is equipped with a AMS1117-3.3 voltage regulator, which provides 3.3V to the chip.   
 Therefore, the level of SPI is 3.3V.   
 
