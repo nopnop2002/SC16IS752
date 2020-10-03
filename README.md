@@ -30,6 +30,7 @@ SC16IS750/752 Driver for RaspberryPi
 |Vdd|Vss|0x92|
 |Vss|Vdd|0x98|
 |Vss|Vss|0x9A|
+
 (*2)Requires PullUp   
 (*3)No Requires PullUp
 
