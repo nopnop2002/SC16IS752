@@ -1,22 +1,5 @@
 /*
-Description:
-This is a example code for Sandbox Electronics' I2C/SPI to UART bridge module.
-You can get one of those products on
-http://sandboxelectronics.com
-
-Version:
-V0.1
-
-Release Date:
-2014-02-16
-
-Author:
-Tiequan Shao		  info@sandboxelectronics.com
-
-Lisence:
-CC BY-NC-SA 3.0
-
-Please keep the above information when you use this code in your project.
+SC16IS750/752 Driver for RaspberryPi
 */
 
 
