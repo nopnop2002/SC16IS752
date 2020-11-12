@@ -68,5 +68,6 @@ int main(int argc, char **argv){
 		}	
 		delay(200);
 	}
+	return 0;
 }
 
