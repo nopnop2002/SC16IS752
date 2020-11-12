@@ -1,3 +1,6 @@
+# Software requirements
+- WiringPi Library   
+
 # SC16IS750 Driver for RaspberryPi
 
 14.7456MHz crystal is used for SC16IS750   
