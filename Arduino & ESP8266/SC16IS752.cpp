@@ -26,7 +26,7 @@ SC16IS752::SC16IS752(uint8_t prtcl, uint8_t addr_sspin)
 		device_address_sspin = addr_sspin;
 	}
 	peek_flag = 0;
-//	timeout = 1000;
+	//timeout = 1000;
 }
 
 
@@ -91,13 +91,13 @@ uint8_t SC16IS752::digitalRead(uint8_t pin)
 uint8_t SC16IS752::ReadRegister(uint8_t channel, uint8_t reg_addr)
 {
 	uint8_t result;
-	if ( protocol == SC16IS750_PROTOCOL_I2C ) {  // register read operation via I2C
+	if ( protocol == SC16IS750_PROTOCOL_I2C ) {			// register read operation via I2C
 		WIRE.beginTransmission(device_address_sspin);
 		WIRE.write((reg_addr<<3 | channel<<1));
 		WIRE.endTransmission(0);
 		WIRE.requestFrom(device_address_sspin,(uint8_t)1);
 		result = WIRE.read();
-	} else if (protocol == SC16IS750_PROTOCOL_SPI) {								   //register read operation via SPI
+	} else if (protocol == SC16IS750_PROTOCOL_SPI) {	//register read operation via SPI
 		::digitalWrite(device_address_sspin, LOW);
 		delayMicroseconds(10);
 		SPI.transfer(0x80|((reg_addr<<3 | channel<<1)));
@@ -129,19 +129,18 @@ void SC16IS752::WriteRegister(uint8_t channel, uint8_t reg_addr, uint8_t val)
 	Serial.println(val,HEX);
 #endif
 
-	if ( protocol == SC16IS750_PROTOCOL_I2C ) {  // register read operation via I2C
+	if ( protocol == SC16IS750_PROTOCOL_I2C ) {			// register write operation via I2C
 		WIRE.beginTransmission(device_address_sspin);
 		WIRE.write((reg_addr<<3 | channel<<1));
 		WIRE.write(val);
 		WIRE.endTransmission(1);
-	} else {
+	} else {											//register write operation via SPI
 		::digitalWrite(device_address_sspin, LOW);
 		delayMicroseconds(10);
 		SPI.transfer((reg_addr<<3 | channel<<1));
 		SPI.transfer(val);
 		delayMicroseconds(10);
 		::digitalWrite(device_address_sspin, HIGH);
-
 	}
 	return ;
 }
@@ -219,19 +218,20 @@ void SC16IS752::SetLine(uint8_t channel, uint8_t data_length, uint8_t parity_sel
 		temp_lcr |= 0x04;
 	}
 
-	switch (parity_select) {			//parity selection length settings
-		case 0:						 //no parity
+	//parity selection length settings
+	switch (parity_select) {
+		case 0:						//no parity
 			 break;
-		case 1:						 //odd parity
+		case 1:						//odd parity
 			temp_lcr |= 0x08;
 			break;
-		case 2:						 //even parity
+		case 2:						//even parity
 			temp_lcr |= 0x18;
 			break;
-		case 3:						 //force '1' parity
+		case 3:						//force '1' parity
 			temp_lcr |= 0x03;
 			break;
-		case 4:						 //force '0' parity
+		case 4:						//force '0' parity
 			break;
 		default:
 			break;
@@ -284,9 +284,7 @@ uint8_t SC16IS752::GPIOGetPinState(uint8_t pin_number)
 
 uint8_t SC16IS752::GPIOGetPortState(void)
 {
-
 	return ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
-
 }
 
 void SC16IS752::GPIOSetPortMode(uint8_t port_io)
@@ -407,7 +405,7 @@ void SC16IS752::FIFOEnable(uint8_t channel, uint8_t fifo_enable)
 
 void SC16IS752::FIFOReset(uint8_t channel, uint8_t rx_fifo)
 {
-	 uint8_t temp_fcr;
+	uint8_t temp_fcr;
 
 	temp_fcr = ReadRegister(channel, SC16IS750_REG_FCR);
 
@@ -448,14 +446,13 @@ uint8_t SC16IS752::FIFOAvailableData(uint8_t channel)
 	Serial.print("=====Available data:");
 	Serial.println(ReadRegister(channel, SC16IS750_REG_RXLVL), DEC);
 #endif
-   return ReadRegister(channel, SC16IS750_REG_RXLVL);
+	return ReadRegister(channel, SC16IS750_REG_RXLVL);
 //	return ReadRegister(channel, SC16IS750_REG_LSR) & 0x01;
 }
 
 uint8_t SC16IS752::FIFOAvailableSpace(uint8_t channel)
 {
    return ReadRegister(channel, SC16IS750_REG_TXLVL);
-
 }
 
 void SC16IS752::WriteByte(uint8_t channel, uint8_t val)
