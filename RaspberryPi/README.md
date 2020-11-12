@@ -18,6 +18,12 @@ Connect TX and RX with a short wire
 __Connections should be as short as possible__
 
 ```
+git clone https://github.com/nopnop2002/SC16IS752
+
+cd RaspberryPi
+
+make
+
 sudo ./sc16is750_selftest I2C i2c_address
 
 sudo ./sc16is750_selftest SPI chip_select_gpio
@@ -91,6 +97,12 @@ Connect TX of ChannelB and RX of ChannelA with a short wire
 __Connections should be as short as possible__
 
 ```
+git clone https://github.com/nopnop2002/SC16IS752
+
+cd RaspberryPi
+
+make
+
 sudo ./sc16is752_selftest I2C i2c_address
 
 sudo ./sc16is752_selftest SPI chip_select_gpio
