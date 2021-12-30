@@ -24,9 +24,9 @@ cd SC16IS752/RaspberryPi
 
 make
 
-sudo ./sc16is750_selftest I2C i2c_address
+sudo ./sc16is750_selftest I2C {i2c_address}
 
-sudo ./sc16is750_selftest SPI chip_select_gpio
+sudo ./sc16is750_selftest SPI {chip_select_gpio}
 ```
 
 ---
@@ -58,9 +58,9 @@ void loop() {
 ```
 
 ```
-sudo ./sc16is750_receiver I2C i2c_address baudrate
+sudo ./sc16is750_receiver I2C {i2c_address} {baudrate}
 
-sudo ./sc16is750_receiver SPI chip_select_gpio baudrate
+sudo ./sc16is750_receiver SPI {chip_select_gpio} {baudrate}
 ```
 
 ![sc16is750-i2c](https://user-images.githubusercontent.com/6020549/71321400-0b68d680-24fc-11ea-951a-8325eff93eb8.jpg)
@@ -74,9 +74,9 @@ sudo ./sc16is750_receiver SPI chip_select_gpio baudrate
 Connect GPIO0 and LED.   
 
 ```
-sudo ./sc16is750_gpio I2C i2c_address
+sudo ./sc16is750_gpio I2C {i2c_address}
 
-sudo ./sc16is750_gpio SPI chip_select_gpio
+sudo ./sc16is750_gpio SPI {chip_select_gpio}
 ```
 
 ---
@@ -105,9 +105,9 @@ cd RaspberryPi
 
 make
 
-sudo ./sc16is752_selftest I2C i2c_address
+sudo ./sc16is752_selftest I2C {i2c_address}
 
-sudo ./sc16is752_selftest SPI chip_select_gpio
+sudo ./sc16is752_selftest SPI {chip_select_gpio}
 ```
 
 ---
@@ -139,8 +139,8 @@ sudo ./sc16is752_receiver SPI chip_select_gpio channelA_baudrate channelB_baudra
 Connect GPIO0 and LED.   
 
 ```
-sudo ./sc16is752_gpio I2C i2c_address
+sudo ./sc16is752_gpio I2C {i2c_address}
 
-sudo ./sc16is752_gpio SPI chip_select_gpio
+sudo ./sc16is752_gpio SPI {chip_select_gpio}
 ```
 
