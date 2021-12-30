@@ -8,12 +8,14 @@ int main(int argc, char **argv){
 
 	SC16IS750_t dev;
 	
+	//printf("argc=%d\n",argc);
 	if (argc < 3) {
 		printf("USAGE:\n");
 		printf("\t%s I2C i2c_address : For I2C\n", argv[0]);
 		printf("\t%s SPI chip_select : For SPI\n", argv[0]);
 		return 1;
 	}
+
 	
 	if (strcmp(argv[1], "I2C") == 0) {
 		long i2c_address = strtol(argv[2], NULL, 16);
@@ -30,6 +32,12 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
+	int gpio = 0;
+	if (argc == 4) {
+		gpio = strtol(argv[3], NULL, 10);
+	}
+	printf("gpio=%d\n", gpio);
+
 	// wiringPi Initialization
 	if(wiringPiSetup() == -1) {
 		printf("wiringPiSetup Fail\n");
@@ -45,7 +53,6 @@ int main(int argc, char **argv){
 		printf("device found\n");
 	}
 
-	int gpio = 0;
 	SC16IS750_pinMode(&dev, gpio, OUTPUT);
 	while (1) {
 		SC16IS750_digitalWrite(&dev, gpio, HIGH);

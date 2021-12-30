@@ -52,24 +52,21 @@ int main(int argc, char **argv){
 	char buffer[64] = {0};
 	int index = 0;
 
-	while(1) {
-		while(SC16IS750_available(&dev, SC16IS750_CHANNEL)==0);
-		char c = SC16IS750_read(&dev, SC16IS750_CHANNEL);
-#if 0
-		if (c < 0x20) {
-			printf("c= (0x%02x)\n",c);
-		} else {
-			printf("c=%c(0x%02x)\n",c,c);
-		}
-#endif
-		if (c == 0x0d) {
+	SC16IS750_setTimeout(&dev, 500);
 
-		} else if (c == 0x0a) {
+	while(1) {
+		int16_t c = SC16IS750_readwithtimeout(&dev);
+#if 0
+		printf("SC16IS750_readwithtimeout=%d\n", c);
+#endif
+		if (c != -1) {
+			if (index < sizeof(buffer)-1) {
+				buffer[index++] = c;
+				buffer[index] = 0;
+			}
+		} else {
 			printf("[%s]\n",buffer);
 			index = 0;
-		} else {
-			buffer[index++] = c;
-			buffer[index] = 0;
 		}
 	}
 }

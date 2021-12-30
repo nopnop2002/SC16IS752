@@ -31,11 +31,11 @@ sudo ./sc16is750_selftest SPI {chip_select_gpio}
 
 ---
 
-## sc16is750_receive
-
+## sc16is750_receive   
+Input is completed with the terminator character.   
+Terminating character is CR + LF.   
 Connect RX of SC16IS750 and TX of other computer at any baud rate.   
 Connect Gnd of Raspberry Pi and Gnd of other computer.   
-Terminating character is CR + LF.   
 
 __Connections should be as short as possible.__
 
@@ -50,9 +50,8 @@ void setup() {
 
 void loop() {
   char buf[64];
-  sprintf(buf,"Hello Wold, Baudrate is %ld", baudrate);
+  sprintf(buf,"Hello Wold %ld, Baudrate is %ld", millis(), baudrate);
   Serial.println(buf);
-  //Serial.println("Hello this is Arduino");
   delay(1000);
 }
 ```
@@ -63,20 +62,57 @@ sudo ./sc16is750_receiver I2C {i2c_address} {baudrate}
 sudo ./sc16is750_receiver SPI {chip_select_gpio} {baudrate}
 ```
 
-![sc16is750-i2c](https://user-images.githubusercontent.com/6020549/71321400-0b68d680-24fc-11ea-951a-8325eff93eb8.jpg)
+![sc16is750-i2c-receive-terminator](https://user-images.githubusercontent.com/6020549/147734850-7a2d02b6-c56f-4d56-a0a1-c1f4d9f0f194.jpg)
 
-![sc16is750-spi](https://user-images.githubusercontent.com/6020549/71321404-0e63c700-24fc-11ea-9b35-11d1daa33cc6.jpg)
+![sc16is750-spi-receive-terminator](https://user-images.githubusercontent.com/6020549/147734881-109f1b89-248a-4853-b11f-a4cfaf91da41.jpg)
+
 
 ---
 
+## sc16is750_receive_timeout
+Input is completed with the timeout.   
+Timeout is 500 mill sec.   
+Connect RX of SC16IS750 and TX of other computer at any baud rate.   
+Connect Gnd of Raspberry Pi and Gnd of other computer.   
+
+__Connections should be as short as possible.__
+
+
+### Sketch of the other side
+```
+#define baudrate 115200L
+
+void setup() {
+  Serial.begin(baudrate);
+}
+
+void loop() {
+  char buf[64];
+  sprintf(buf,"Hello Wold %ld, Baudrate is %ld", millis(), baudrate);
+  Serial.print(buf);
+  delay(1000);
+}
+```
+
+```
+sudo ./sc16is750_receiver_timeout I2C {i2c_address} {baudrate}
+
+sudo ./sc16is750_receiver_timeout SPI {chip_select_gpio} {baudrate}
+```
+
+![sc16is750-i2c-receive-timeout](https://user-images.githubusercontent.com/6020549/147734923-96c09177-8693-4596-8d1e-4f35a5c8d651.jpg)
+
+![sc16is750-spi-receive-timeout](https://user-images.githubusercontent.com/6020549/147734935-7b1b9de6-9fb7-41f4-8d65-1d667960fe99.jpg)
+
+---
 ## sc16is750_gpio
 
 Connect GPIO0 and LED.   
 
 ```
-sudo ./sc16is750_gpio I2C {i2c_address}
+sudo ./sc16is750_gpio I2C {i2c_address} 0
 
-sudo ./sc16is750_gpio SPI {chip_select_gpio}
+sudo ./sc16is750_gpio SPI {chip_select_gpio} 0
 ```
 
 ---
@@ -113,11 +149,11 @@ sudo ./sc16is752_selftest SPI {chip_select_gpio}
 ---
 
 ## sc16is752_receive
-
+Input is completed with the terminator character.   
+Terminating character is CR + LF.   
 Connect RX of ChannelA and other computer TX at any baud rate.   
 Connect RX of ChannelB and other computer TX at any baud rate.   
 Connect Gnd of Raspberry Pi and Gnd of other computer.   
-Terminating character is CR + LF.   
 
 __Connections should be as short as possible.__
 

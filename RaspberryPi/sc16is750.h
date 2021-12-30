@@ -94,7 +94,7 @@ typedef struct {
 	int peek_buf;
 	uint8_t peek_flag;
 	long crystal_freq;
-	//uint32_t timeout;
+	uint32_t timeout;
 } SC16IS750_t;
 
 	void	SC16IS750_init(SC16IS750_t * dev, uint8_t prtcl, uint8_t addr);
@@ -107,8 +107,9 @@ typedef struct {
 	void	SC16IS750_digitalWrite(SC16IS750_t * dev, uint8_t pin, uint8_t value);
 	uint8_t SC16IS750_digitalRead(SC16IS750_t * dev, uint8_t pin);
 	uint8_t SC16IS750_ping(SC16IS750_t * dev);
-//	void	SC16IS750_setTimeout(SC16IS750_t * dev, uint32_t);
-//	size_t	SC16IS750_readBytes(SC16IS750_t * dev, char *buffer, size_t length);
+	void	SC16IS750_setTimeout(SC16IS750_t * dev, uint32_t);
+	size_t	SC16IS750_readBytes(SC16IS750_t * dev, char *buffer, size_t length);
+	int16_t SC16IS750_readwithtimeout(SC16IS750_t * dev);
 	int		SC16IS750_peek(SC16IS750_t * dev, uint8_t channel);
 	void	SC16IS750_flush(SC16IS750_t * dev, uint8_t channel);
 	uint8_t SC16IS750_GPIOGetPortState(SC16IS750_t * dev);

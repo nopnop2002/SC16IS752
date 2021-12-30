@@ -4,6 +4,7 @@ SC16IS750/752 Driver for RaspberryPi
 
 
 //#define SC16IS750_DEBUG_PRINT
+
 #include <stdio.h>	
 #include <stdint.h>
 #include <stdbool.h>  
@@ -549,7 +550,7 @@ uint8_t SC16IS750_ping(SC16IS750_t * dev)
 	return 1;
 
 }
-/*
+
 void SC16IS750_setTimeout(SC16IS750_t * dev, uint32_t time_out)
 {
 	dev->timeout = time_out;
@@ -578,12 +579,11 @@ int16_t SC16IS750_readwithtimeout(SC16IS750_t * dev)
 	uint32_t time_stamp;
 	time_stamp = millis();
 	do {
-		tmp = SC16IS750_read(dev);
+		tmp = SC16IS750_read(dev, SC16IS750_CHANNEL);
 		if (tmp >= 0) return tmp;
-	} while(millis() - time_stamp < timeout);
+	} while(millis() - time_stamp < dev->timeout);
 	return -1;	 // -1 indicates timeout
 }
-*/
 
 void SC16IS750_flush(SC16IS750_t * dev, uint8_t channel)
 {
