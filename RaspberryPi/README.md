@@ -20,7 +20,7 @@ __Connections should be as short as possible.__
 ```
 git clone https://github.com/nopnop2002/SC16IS752
 
-cd RaspberryPi
+cd SC16IS752/RaspberryPi
 
 make
 
