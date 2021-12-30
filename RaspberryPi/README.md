@@ -31,7 +31,7 @@ sudo ./sc16is750_selftest SPI {chip_select_gpio}
 
 ---
 
-## sc16is750_receive   
+## sc16is750_receiver   
 Input is completed with the terminator character.   
 Terminating character is CR + LF.   
 Connect RX of SC16IS750 and TX of other computer at any baud rate.   
@@ -69,7 +69,7 @@ sudo ./sc16is750_receiver SPI {chip_select_gpio} {baudrate}
 
 ---
 
-## sc16is750_receive_timeout
+## sc16is750_receiver_timeout
 Input is completed with the timeout.   
 Timeout is 500 mill sec.   
 Connect RX of SC16IS750 and TX of other computer at any baud rate.   
