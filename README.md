@@ -31,10 +31,10 @@ Therefore, the level of i2c is 3.3V.
 (*2)i2c address selection   
 |A0|A1|Address|
 |:-:|:-:|:-:|
-|Vdd|Vdd|0x90|
-|Vdd|Vss|0x92|
-|Vss|Vdd|0x98|
-|Vss|Vss|0x9A|
+|5V|5V|0x48|
+|5V|GND|0x49|
+|GND|5V|0x4C|
+|GND|GND|0x4D|
 
 (*3)Requires PullUp   
 (*4)No Requires PullUp   
