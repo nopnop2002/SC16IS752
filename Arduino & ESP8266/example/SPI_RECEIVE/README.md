@@ -1,7 +1,9 @@
 # SPI_RECEIVE
 
-Connect TX(A-CH) and RX(B-CH) with a short wire   
-Connect TX(B-CH) and RX(A-CH) with a short wire   
+Connect RX(A-CH) and other Arduno TX at 9600 bps.   
+Connect RX(B-CH) and other Arduno TX at 384000 bps.   
+Connect Gnd and other Arduno Gnd.   
+Terminating character is CR + LF.
 
 __Connections should be as short as possible__
 
