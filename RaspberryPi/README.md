@@ -31,7 +31,7 @@ sudo ./sc16is750_selftest SPI {chip_select_gpio}
 
 ---
 
-## sc16is750_receiver   
+## sc16is750_receiver
 Input is completed with the terminator character.   
 Terminating character is CR + LF.   
 Connect RX of SC16IS750 and TX of other computer at any baud rate.   
@@ -148,7 +148,7 @@ sudo ./sc16is752_selftest SPI {chip_select_gpio}
 
 ---
 
-## sc16is752_receive
+## sc16is752_receiver
 Input is completed with the terminator character.   
 Terminating character is CR + LF.   
 Connect RX of ChannelA and other computer TX at any baud rate.   
