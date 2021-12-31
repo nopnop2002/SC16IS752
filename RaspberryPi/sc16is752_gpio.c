@@ -30,6 +30,12 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
+	int gpio = 0;
+	if (argc == 4) {
+		gpio = strtol(argv[3], NULL, 10);
+	}
+	printf("gpio=%d\n", gpio);
+
 	// wiringPi Initialization
 	if(wiringPiSetup() == -1) {
 		printf("wiringPiSetup Fail\n");
@@ -45,7 +51,6 @@ int main(int argc, char **argv){
 		printf("device found\n");
 	}
 
-	int gpio = 0;
 	SC16IS750_pinMode(&dev, gpio, OUTPUT);
 	while (1) {
 		SC16IS750_digitalWrite(&dev, gpio, HIGH);

@@ -159,14 +159,36 @@ __Connections should be as short as possible.__
 
 
 ```
-sudo ./sc16is752_receiver I2C i2c_address channelA_baudrate channelB_baudrate
+sudo ./sc16is752_receiver I2C {i2c_address} {channelA_baudrate} {channelB_baudrate}
 
-sudo ./sc16is752_receiver SPI chip_select_gpio channelA_baudrate channelB_baudrate
+sudo ./sc16is752_receiver SPI {chip_select_gpio} {channelA_baudrate} {channelB_baudrate}
 ```
 
-![Raspberry-i2c](https://user-images.githubusercontent.com/6020549/71444661-5f6ef780-2756-11ea-8af5-1f83be2090b1.jpg)
+![sc16is752-i2c-receive-terminator](https://user-images.githubusercontent.com/6020549/147802373-4d9dde52-a9d0-4603-8c11-fdea8aa18b86.jpg)
 
-![Raspberry-spi](https://user-images.githubusercontent.com/6020549/71444662-6138bb00-2756-11ea-978a-69cba5271bd5.jpg)
+![sc16is752-spi-receive-terminator](https://user-images.githubusercontent.com/6020549/147802379-39f06697-f2a6-4d8c-83c4-4b718235b0b8.jpg)
+
+---
+
+## sc16is752_receiver_timeout
+Input is completed with the timeout.   
+Timeout is 500 mill sec.   
+Connect RX of ChannelA and other computer TX at any baud rate.   
+Connect RX of ChannelB and other computer TX at any baud rate.   
+Connect Gnd of Raspberry Pi and Gnd of other computer.   
+
+__Connections should be as short as possible.__
+
+
+```
+sudo ./sc16is752_receiver_timeout I2C {i2c_address} {channelA_baudrate} {channelB_baudrate}
+
+sudo ./sc16is752_receiver_timeout SPI {chip_select_gpio} {channelA_baudrate} {channelB_baudrate}
+```
+
+![sc16is752-i2c-receive-timeout](https://user-images.githubusercontent.com/6020549/147802424-02d30db7-ad47-414c-bf0f-a03c27bc9f0e.jpg)
+
+![sc16is752-spi-receive-timeout](https://user-images.githubusercontent.com/6020549/147802430-be628a31-88f3-4dac-a989-5c2b75fc34c4.jpg)
 
 ---
 
@@ -175,8 +197,8 @@ sudo ./sc16is752_receiver SPI chip_select_gpio channelA_baudrate channelB_baudra
 Connect GPIO0 and LED.   
 
 ```
-sudo ./sc16is752_gpio I2C {i2c_address}
+sudo ./sc16is752_gpio I2C {i2c_address} 0
 
-sudo ./sc16is752_gpio SPI {chip_select_gpio}
+sudo ./sc16is752_gpio SPI {chip_select_gpio} 0
 ```
 

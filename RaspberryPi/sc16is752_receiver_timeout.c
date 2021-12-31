@@ -56,46 +56,32 @@ int main(int argc, char **argv){
 	char buffer_B[64] = {0};
 	int index_B = 0;
 
-	char c;
-	while(1) {
-		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_A)) {
-			c = SC16IS750_read(&dev, SC16IS752_CHANNEL_A);
-#if 0
-			if (c < 0x20) {
-				printf("c_A= (0x%02x)\n",c);
-			} else {
-				printf("c_A=%c(0x%02x)\n",c,c);
-			}
-#endif
-			if (c == 0x0d) {
-	
-			} else if (c == 0x0a) {
-				printf("[%s]\n",buffer_A);
-				index_A = 0;
-			} else {
-				buffer_A[index_A++] = c;
-				buffer_A[index_A] = 0;
-			}
-		}
+	SC16IS750_setTimeout(&dev, 500);
 
-		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_B)) {
-			c = SC16IS750_read(&dev, SC16IS752_CHANNEL_B);
+	int16_t c;
+	uint8_t channel;
+	while(1) {
+		c = SC16IS752_readwithtimeout(&dev, &channel);
 #if 0
-			if (c < 0x20) {
-				printf("c_B= (0x%02x)\n",c);
-			} else {
-				printf("c_B=%c(0x%02x)\n",c,c);
-			}
+		printf("SC16IS752_readwithtimeout=%d %d\n", c, channel);
 #endif
-			if (c == 0x0d) {
-	
-			} else if (c == 0x0a) {
-				printf("[%s]\n",buffer_B);
-				index_B = 0;
+		if (c != -1) {
+			if (channel == SC16IS752_CHANNEL_A) {
+				if (index_A < sizeof(buffer_A)-1) {
+					buffer_A[index_A++] = c;
+					buffer_A[index_A] = 0;
+				}
 			} else {
-				buffer_B[index_B++] = c;
-				buffer_B[index_B] = 0;
+				if (index_B < sizeof(buffer_B)-1) {
+					buffer_B[index_B++] = c;
+					buffer_B[index_B] = 0;
+				}
 			}
+		} else {
+			printf("[%s]\n",buffer_A);
+			index_A = 0;
+			printf("[%s]\n",buffer_B);
+			index_B = 0;
 		}
 	}
 }

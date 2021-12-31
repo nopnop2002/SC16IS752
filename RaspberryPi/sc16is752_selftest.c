@@ -53,17 +53,27 @@ int main(int argc, char **argv){
 
 	while(1) {
 		SC16IS750_write(&dev, SC16IS752_CHANNEL_A, 0x55);
-		while(SC16IS750_available(&dev, SC16IS752_CHANNEL_B)==0);
+		delay(10);
+		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_B)==0) {
+			printf("serial communication error 1\n");
+			break;
+		}
+
 		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_B)!=0x55) {
-			printf("serial communication error\n");
+			printf("serial communication error 2\n");
 			break;
 		}	
 		delay(200);
 
 		SC16IS750_write(&dev, SC16IS752_CHANNEL_B, 0xAA);
-		while(SC16IS750_available(&dev, SC16IS752_CHANNEL_A)==0);
+		delay(10);
+		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_A)==0) {
+			printf("serial communication error 3\n");
+			break;
+		}
+
 		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_A)!=0xAA) {
-			printf("serial communication error\n");
+			printf("serial communication error 4\n");
 			break;
 		}	
 		delay(200);

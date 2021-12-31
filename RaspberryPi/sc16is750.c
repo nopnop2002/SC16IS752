@@ -585,6 +585,22 @@ int16_t SC16IS750_readwithtimeout(SC16IS750_t * dev)
 	return -1;	 // -1 indicates timeout
 }
 
+int16_t SC16IS752_readwithtimeout(SC16IS750_t * dev, uint8_t * channel)
+{
+	int16_t tmp;
+	uint32_t time_stamp;
+	time_stamp = millis();
+	do {
+		*channel = SC16IS752_CHANNEL_A;
+		tmp = SC16IS750_read(dev, SC16IS752_CHANNEL_A);
+		if (tmp >= 0) return tmp;
+		*channel = SC16IS752_CHANNEL_B;
+		tmp = SC16IS750_read(dev, SC16IS752_CHANNEL_B);
+		if (tmp >= 0) return tmp;
+	} while(millis() - time_stamp < dev->timeout);
+	return -1;	 // -1 indicates timeout
+}
+
 void SC16IS750_flush(SC16IS750_t * dev, uint8_t channel)
 {
 	uint8_t tmp_lsr;
