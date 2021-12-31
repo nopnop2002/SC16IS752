@@ -11,7 +11,7 @@
 SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS); 
 
 #define baudrate_A 9600
-#define baudrate_B 38400
+#define baudrate_B 115200
 
 void setup() 
 {

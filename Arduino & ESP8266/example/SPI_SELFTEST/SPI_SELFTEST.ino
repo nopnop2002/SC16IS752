@@ -8,20 +8,19 @@
  #define CS 15
 #endif
 
+
 SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS); 
 
 //Connect TX(A-CH) and RX(B-CH) with a wire
 //Connect TX(B-CH) and RX(A-CH) with a wire
-//Remove A0, A1 resistors which set the I2C address
-//Remove SCL pull up resistors if you are using Duemilanove
-//Pin 6 should be connected to CS of the module.
+//Pin 6(AVR)/15(ESP8266) should be connected to CS of the module.
 
 void setup() 
 {
     Serial.begin(115200);
     Serial.println("Start testing");
     // UART to Serial Bridge Initialization
-    spiuart.begin(SC16IS752_DEFAULT_SPEED, SC16IS752_DEFAULT_SPEED); //baudrate setting
+    spiuart.begin(9600, 9600);               //baudrate setting
     if (spiuart.ping()!=1) {
         Serial.println("Device not found");
         while(1);
@@ -36,11 +35,11 @@ void loop()
     spiuart.write(SC16IS752_CHANNEL_A, 0x55);
     delay(10);
     if (spiuart.available(SC16IS752_CHANNEL_B)==0) {
-        Serial.println("Please connnect TX(Channel A) and RX(Channel B) with a wire and reset your Arduino");
+        Serial.println("Please connnect CH-A TX and CH-B RX with a wire and reset your Arduino");
         while(1);
     }        
     if (spiuart.read(SC16IS752_CHANNEL_B)!=0x55) {
-        Serial.println("Please connnect TX(Channel A) and RX(Channel B) with a wire and reset your Arduino");
+        Serial.println("Serial communication error");
         while(1);
     }   
     delay(200);
@@ -48,11 +47,11 @@ void loop()
     spiuart.write(SC16IS752_CHANNEL_B, 0xAA);
     delay(10);
     if (spiuart.available(SC16IS752_CHANNEL_A)==0) {
-        Serial.println("Please connnect TX(Channel B) and RX(Channel A) with a wire and reset your Arduino");
+        Serial.println("Please connnect CH-B TX and CH-A RX with a wire and reset your Arduino");
         while(1);
     }  
     if (spiuart.read(SC16IS752_CHANNEL_A)!=0xAA) {
-        Serial.println("Please connnect TX(Channel B) and RX(Channel A) with a wire and reset your Arduino");
+        Serial.println("Serial communication error");
         while(1);
     }   
     

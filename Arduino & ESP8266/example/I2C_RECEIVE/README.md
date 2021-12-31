@@ -1,13 +1,13 @@
 # I2C_RECEIVE
-
-Connect RX(A-CH) and other Arduno TX at 9600 bps.   
-Connect RX(B-CH) and other Arduno TX at 384000 bps.   
+Input is completed with the terminator character.   
+Terminating character is CR + LF.   
+Connect RX of ChannelA and other Arduno TX at 9600 bps.   
+Connect RX of ChannelB and other Arduno TX at 115200 bps.   
 Connect Gnd and other Arduno Gnd.   
-Terminating character is CR + LF.
 
 __Connections should be as short as possible__
 
-![Arduino](https://user-images.githubusercontent.com/6020549/71318829-8bca1000-24d9-11ea-829b-4a07f90ac1e9.jpg)
+![atmega-i2c-receive-terminator](https://user-images.githubusercontent.com/6020549/147806077-1eedccf0-8d04-4961-95b2-a24a683e0806.jpg)
 
 # Channel baudrate
 You can specify different baudrates for channel A and channel B
@@ -24,7 +24,6 @@ void loop() {
   char buf[64];
   sprintf(buf,"Hello Wold, Baudrate is %ld", baudrate);
   Serial.println(buf);
-  //Serial.println("Hello this is Arduino");
   delay(1000);
 }
 ```
