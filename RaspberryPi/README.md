@@ -4,7 +4,9 @@
 # SC16IS750 Driver for RaspberryPi
 SC16IS750 has a single channel UART and eight GPIOs.   
 14.7456MHz crystal is used for SC16IS750.   
-__The maximum transfer speed of SC16IS750 is 115,200bps.__
+__The maximum transfer speed of SC16IS750 is 14745600/16 = 921,600bps.__   
+__However, when communicating with Arduino UNO, the maximum communication speed of UNO is 115200bps.__   
+
 
 ![SC16IS750](https://user-images.githubusercontent.com/6020549/71384102-bd022780-2622-11ea-8f5a-25f2fd733f19.JPG)
 
@@ -119,7 +121,7 @@ sudo ./sc16is750_gpio SPI {chip_select_gpio} 0
 # SC16IS752 Driver for RaspberryPi
 SC16IS752 has a 2-channel UART and 8 GPIOs.   
 1.8432Mhz crystal is used for SC16IS752.   
-__The maximum transfer speed of SC16IS752 is 115,200bps.__
+__The maximum transfer speed of SC16IS752 is 1843200/16 = 115,200bps.__
 
 ![SC16IS752-1](https://user-images.githubusercontent.com/6020549/71384120-e327c780-2622-11ea-8b85-b35da2f9deaa.JPG)
 
