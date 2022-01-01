@@ -116,7 +116,32 @@ sudo ./sc16is750_gpio I2C {i2c_address} 0
 sudo ./sc16is750_gpio SPI {chip_select_gpio} 0
 ```
 
+__There is a bug at the PCB routing:__   
+__All boards are missing the wire between the IRQ pin of the SC16IS750 and the IRQ connector at the board.__   
+
+
+```  Breakout
+     +--------------------------
+     |        +---------------+
+     |        |SC16IS750      |
+     |        |               |
+     |        |               |
+     |        |               |
+     |        |               |
+     |        |               |
+     |        |               |
+     |        |               |
+    IRQ   +--IRQ              |
+     |    |   |               |
+     |    |   |               |
+     |    |   |               |
+     |    |   +---------------+
+     |    |
+     |    +--1Kohm--N/C
+     |
+     +--------------------------
 ---
+
 
 # SC16IS752 Driver for RaspberryPi
 SC16IS752 has a 2-channel UART and 8 GPIOs.   
