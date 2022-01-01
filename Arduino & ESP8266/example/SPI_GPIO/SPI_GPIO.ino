@@ -3,12 +3,12 @@
 #include <SC16IS752.h>
 
 #ifdef __AVR__
- #define GPIO 0
  #define CS 6
 #elif ESP8266 // ESP8266
- #define GPIO 4
  #define CS 15
 #endif
+
+#define GPIO 0
 
 SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS); 
 
@@ -18,19 +18,19 @@ SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS);
 
 void setup() 
 {
-    Serial.begin(115200);
-    Serial.println("Start testing");
-    // UART to Serial Bridge Initialization
-    spiuart.begin(SC16IS752_DEFAULT_SPEED, SC16IS752_DEFAULT_SPEED); //baudrate setting
-    if (spiuart.ping()!=1) {
-        Serial.println("Device not found");
-        while(1);
-    } else {
-        Serial.println("Device found");
-    }
+  Serial.begin(115200);
+  Serial.println("Start testing");
+  // UART to Serial Bridge Initialization
+  spiuart.begin(SC16IS752_DEFAULT_SPEED, SC16IS752_DEFAULT_SPEED); //baudrate setting
+  if (spiuart.ping()!=1) {
+      Serial.println("Device not found");
+      while(1);
+  } else {
+      Serial.println("Device found");
+  }
 
-    spiuart.pinMode(GPIO, OUTPUT);
-    spiuart.digitalWrite(GPIO, LOW);
+  spiuart.pinMode(GPIO, OUTPUT);
+  spiuart.digitalWrite(GPIO, LOW);
 }
 
 void loop() 

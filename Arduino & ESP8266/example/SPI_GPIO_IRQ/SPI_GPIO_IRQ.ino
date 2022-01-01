@@ -38,11 +38,17 @@ void setup()
   }
 
   attachInterrupt(0, func, CHANGE);
+  //pinMode(IRQ, INPUT);
+  
   spiuart.pinMode(GPIO, INPUT);
   spiuart.SetPinInterrupt(0xff); // a change in input will generate an interrupt
 }
 
 void loop() 
 {
+  //uint8_t irq = digitalRead(IRQ);
+  //Serial.print("irq=");
+  //Serial.println(irq);
+  
   delay(1);
 }
