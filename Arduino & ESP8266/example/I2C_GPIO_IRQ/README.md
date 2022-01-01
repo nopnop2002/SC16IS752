@@ -8,7 +8,7 @@ __The I2C library (wire.h) uses interrupts and interrupts cannot be made within 
 
 
 ```
-UNO                         SWC16IL752
+UNO                         SC16IS752
 5V-------------+            +-----------
                |            |
              10Kohm         |

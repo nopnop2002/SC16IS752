@@ -5,7 +5,7 @@ Connect the IRQ to PIN #2 (INT0).
 Connect GPIO0 to the Push Switch.   
 
 ```
-UNO                         SWC16IL752
+UNO                         SC16IS752
 5V-------------+            +-----------
                |            |
              10Kohm         |
