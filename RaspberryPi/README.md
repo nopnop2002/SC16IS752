@@ -120,7 +120,8 @@ __There is a bug at the PCB routing:__
 __All boards are missing the wire between the IRQ pin of the SC16IS750 and the IRQ connector at the board.__   
 
 
-```  Breakout
+```
+     Breakout
      +--------------------------
      |        +---------------+
      |        |SC16IS750      |
@@ -140,7 +141,6 @@ __All boards are missing the wire between the IRQ pin of the SC16IS750 and the I
      |    +--1Kohm--N/C
      |
      +--------------------------
----
 ```
 
 
