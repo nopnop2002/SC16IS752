@@ -11,32 +11,31 @@ __However, when communicating with Arduino UNO, the maximum communication speed 
 ![SC16IS750](https://user-images.githubusercontent.com/6020549/71384102-bd022780-2622-11ea-8f5a-25f2fd733f19.JPG)
 
 __There is a bug at the PCB routing:__   
-__All boards are missing the wire between the IRQ pin of the SC16IS750 and the IRQ connector at the board.__   
+__On all boards, the wire between the SC16IS750 IRQ pin and the board's IRQ connector is missing.__   
 
 
 ```
-     Breakout
-     +--------------------------
-     |
-     |        +---------------+
-     |        |SC16IS750      |
-     |        |               |
-     |        |               |
-     |        |               |
-     |        |               |
-     |        |               |
-     |        |               |
-     |        |               |
-    IRQ   +--IRQ              |
-     |    |   |               |
-     |    |   |               |
-     |    |   |               |
-     |    |   +---------------+
-     |    |
-     |    +--1Kohm--N/C
-     |
-     +--------------------------
-```
+      Breakout
+      +--------------------------
+      |
+      |       +---------------+
+      |       |SC16IS750      |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+     IRQ  +--IRQ              |
+      |   |   |               |
+      |   |   |               |
+      |   |   |               |
+      |   |   +---------------+
+      |   |
+      |   +--1Kohm--N/C
+      |
+      +--------------------------```
 
 ---
 
@@ -151,6 +150,34 @@ SC16IS752 has a 2-channel UART and 8 GPIOs.
 __The maximum transfer speed of SC16IS752 is 1843200/16 = 115,200bps.__
 
 ![SC16IS752-1](https://user-images.githubusercontent.com/6020549/71384120-e327c780-2622-11ea-8b85-b35da2f9deaa.JPG)
+
+__There is a bug at the PCB routing:__   
+__On all boards, the SC16IS750 IRQ pin and the board's IRQ connector are directly connected. PullUp register doesn't work.__   
+
+
+```
+      Breakout
+      +--------------------------
+      |
+      |       +---------------+
+      |       |SC16IS750      |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+      |       |               |
+     IRQ--+--IRQ              |
+      |   |   |               |
+      |   |   |               |
+      |   |   |               |
+      |   |   +---------------+
+      |   |
+      |   +--1Kohm--N/C
+      |
+      +--------------------------
+```
 
 ---
 
