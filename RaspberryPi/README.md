@@ -141,6 +141,7 @@ __All boards are missing the wire between the IRQ pin of the SC16IS750 and the I
      |
      +--------------------------
 ---
+```
 
 
 # SC16IS752 Driver for RaspberryPi
