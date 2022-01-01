@@ -83,7 +83,7 @@ SC16IS752 driver for Arduino
 //#define	 SC16IS750_CRYSTCAL_FREQ (14745600UL) 
 #define 	SC16IS750_CRYSTCAL_FREQ (1843200UL)	  
 //#define	 SC16IS750_CRYSTCAL_FREQ (16000000UL)	
-#define	 SC16IS750_DEBUG_PRINT   (1)
+//#define	 SC16IS750_DEBUG_PRINT   (1)
 #define	 SC16IS750_PROTOCOL_I2C  (0)
 #define	 SC16IS750_PROTOCOL_SPI  (1)
 
@@ -106,8 +106,9 @@ class SC16IS752
 		void	digitalWrite(uint8_t pin, uint8_t value);
 		uint8_t digitalRead(uint8_t pin);
 		uint8_t ping();
-		//void setTimeout(uint32_t);
+		void setTimeout(uint32_t);
 		//size_t readBytes(char *buffer, size_t length);
+		int16_t readwithtimeout(uint8_t * channel);
 		int		peek(uint8_t channel);
 		void	flush(uint8_t channel);
 		uint8_t GPIOGetPortState(void);
@@ -121,7 +122,7 @@ class SC16IS752
 	private:
 		uint8_t device_address_sspin;
 		uint8_t protocol;
-		//uint32_t timeout;
+		uint32_t timeout;
 		int16_t SetBaudrate(uint8_t channel, uint32_t baudrate);
 		uint8_t ReadRegister(uint8_t channel, uint8_t reg_addr);
 		void	WriteRegister(uint8_t channel, uint8_t reg_addr, uint8_t val);
@@ -145,7 +146,6 @@ class SC16IS752
 		void	WriteByte(uint8_t channel, uint8_t val);
 		int		ReadByte(uint8_t channel);
 		void	EnableTransmit(uint8_t channel, uint8_t tx_enable);
-		//int16_t readwithtimeout();
 		int 	peek_buf;
 		uint8_t peek_flag;
 		

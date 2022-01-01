@@ -540,12 +540,13 @@ uint8_t SC16IS752::ping()
 
 }
 
-/*
+
 void SC16IS752::setTimeout(uint32_t time_out)
 {
 	timeout = time_out;
 }
 
+/*
 size_t SC16IS752::readBytes(char *buffer, size_t length)
 {
 	size_t count=0;
@@ -562,19 +563,23 @@ size_t SC16IS752::readBytes(char *buffer, size_t length)
 
 	return count;
 }
+*/
 
-int16_t SC16IS752::readwithtimeout()
+int16_t SC16IS752::readwithtimeout(uint8_t * channel)
 {
 	int16_t tmp;
 	uint32_t time_stamp;
 	time_stamp = millis();
 	do {
-		tmp = read();
+		*channel = SC16IS752_CHANNEL_A;
+		tmp = read(SC16IS752_CHANNEL_A);
+		if (tmp >= 0) return tmp;
+		*channel = SC16IS752_CHANNEL_B;
+		tmp = read(SC16IS752_CHANNEL_B);
 		if (tmp >= 0) return tmp;
 	} while(millis() - time_stamp < timeout);
 	return -1;	 // -1 indicates timeout
 }
-*/
 
 void SC16IS752::flush(uint8_t channel)
 {
