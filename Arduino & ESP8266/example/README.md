@@ -4,8 +4,8 @@
  UART input with terminating character.   
 - RECEIVE_TIMEOUT   
  UART input with timeout.   
-- GPIO
+- GPIO   
  GPIO output.   
-- GPIO_IRQ
+- GPIO_IRQ   
  GPIO input using interrupt.   
 
