@@ -116,6 +116,7 @@ sudo ./sc16is750_gpio I2C {i2c_address} 0
 sudo ./sc16is750_gpio SPI {chip_select_gpio} 0
 ```
 
+## IRQ connector at the board
 __There is a bug at the PCB routing:__   
 __All boards are missing the wire between the IRQ pin of the SC16IS750 and the IRQ connector at the board.__   
 
