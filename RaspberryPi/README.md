@@ -35,7 +35,7 @@ __On all boards, the wire between the SC16IS750 IRQ pin and the board's IRQ conn
       |   |
       |   +--1Kohm--N/C
       |
-      +--------------------------```
+      +--------------------------
 ```
 
 ---
