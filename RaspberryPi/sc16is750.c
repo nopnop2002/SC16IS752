@@ -162,10 +162,12 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 
 	//divisor = (SC16IS750_CRYSTCAL_FREQ/prescaler)/(baudrate*16);
 	uint32_t divisor1 = dev->crystal_freq/prescaler;
-	//printf("divisor1=%d\n",divisor1);
+	//printf("dev->crystal_freq=%ld prescaler=%d divisor1=%d\n",dev->crystal_freq, prescaler, divisor1);
+	//uint32_t max_baudrate = divisor1/16;
+	//printf("max_baudrate=%d\n",max_baudrate);
 	uint32_t divisor2 = baudrate*16;
 	//printf("divisor2=%d\n",divisor2);
-	//divisor = (dev->crystal_freq/prescaler)/(baudrate*16);
+	divisor = (dev->crystal_freq/prescaler)/(baudrate*16);
 	if (divisor2 > divisor1) {
 		printf("This baudrate (%d) is not support\n",baudrate);
 		return 0;
@@ -376,35 +378,36 @@ uint8_t SC16IS750_InterruptPendingTest(SC16IS750_t * dev, uint8_t channel)
 	return (SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_IIR) & 0x01);
 }
 
-void SC16IS750_isr(SC16IS750_t * dev, uint8_t channel)
+int16_t SC16IS750_InterruptEventTest(SC16IS750_t * dev, uint8_t channel)
 {
 	uint8_t irq_src;
 
 	irq_src = SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_IIR);
-	irq_src = (irq_src >> 1);
-	irq_src &= 0x3F;
+	//irq_src = (irq_src >> 1);
+	//irq_src &= 0x3F;
+	irq_src &= 0x3E;
 
 	switch (irq_src) {
-	case 0x06:		//Receiver Line Status Error
-		break;
-	case 0x0c:		//Receiver time-out interrupt
-		break;
-	case 0x04:		//RHR interrupt
-		break;
-	case 0x02:		//THR interrupt
-		break;
-	case 0x00:		//modem interrupt;
-		break;
-	case 0x30:		//input pin change of state
-		break;
-	case 0x10:		//XOFF
-		break;
-	case 0x20:		//CTS,RTS
-		break;
-	default:
-		break;
+		case 0x06:			//Receiver Line Status Error
+			return SC16IS750_RECEIVE_LINE_STATUS_ERROR;
+		case 0x0c:			//Receiver time-out interrupt
+			return SC16IS750_RECEIVE_TIMEOUT_INTERRUPT;
+		case 0x04:			//RHR interrupt
+			return SC16IS750_RHR_INTERRUPT;
+		case 0x02:			//THR interrupt
+			return SC16IS750_THR_INTERRUPT;
+		case 0x00:			//modem interrupt;
+			return SC16IS750_MODEM_INTERRUPT;
+		case 0x30:			//input pin change of state
+			return SC16IS750_INPUT_PIN_CHANGE_STATE;
+		case 0x10:			//XOFF
+			return SC16IS750_RECEIVE_XOFF;
+		case 0x20:			//CTS,RTS
+			return SC16IS750_CTS_RTS_CHANGE;
+		default:
+			return -1;
 	}
-	return;
+	return -1;
 }
 
 void SC16IS750_FIFOEnable(SC16IS750_t * dev, uint8_t channel, uint8_t fifo_enable)

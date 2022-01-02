@@ -250,7 +250,7 @@ sudo ./sc16is752_receiver_timeout SPI {chip_select_gpio} {channelA_baudrate} {ch
 ---
 
 ## sc16is752_gpio
-
+GPIO output.   
 Connect GPIO0 and LED.   
 
 ```
@@ -259,3 +259,40 @@ sudo ./sc16is752_gpio I2C {i2c_address} 0
 sudo ./sc16is752_gpio SPI {chip_select_gpio} 0
 ```
 
+---
+
+## sc16is752_gpio_irq
+Input interrupt using push switch.   
+The IRQ needs to be pulled up with an external resistor because the PCB pattern is wrong.   
+Connect the IRQ to PIN #10 (GPIO15).
+Connect GPIO0 to the Push Switch.   
+
+```
+sudo ./sc16is752_gpio_irq I2C {i2c_address} 0
+
+sudo ./sc16is752_gpio_irq SPI {chip_select_gpio} 0
+```
+
+```
+Rpi                       Breakout
+                         +------------------------
+                         |
+5V-------------+         |       +---------------+
+               |         |       |SC16IS752      |
+             10Kohm      |       |               |
+               +-------GPIO0----GPIO0            |
+              /  Switch  |       |               |
+               |         |       |               |
+GND------------+         |       |               |
+                         |       |               |
+                         |       |               |
+GPIO15---------+--------IRQ--+--IRQ              |
+               |         |   |   |               |
+5V----10Kohm---+         |   |   |               |
+                         |   |   |               |
+                         |   |   +---------------+
+                         |   |
+                         |   +--1Kohm--N/C
+                         |
+                         +-----------------------
+```

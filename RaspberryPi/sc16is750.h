@@ -59,7 +59,7 @@
 #define   SC16IS750_REG_XOFF1 (0X06)
 #define   SC16IS750_REG_XOFF2 (0X07)
 
-//
+//Interrupt Enable Register
 #define   SC16IS750_INT_CTS   (0X80)
 #define   SC16IS750_INT_RTS   (0X40)
 #define   SC16IS750_INT_XOFF  (0X20)
@@ -68,6 +68,18 @@
 #define   SC16IS750_INT_LINE  (0X04)
 #define   SC16IS750_INT_THR   (0X02)
 #define   SC16IS750_INT_RHR   (0X01)
+
+//Interrupt Identification Register
+enum SC16IS750_IIR {
+  SC16IS750_RECEIVE_LINE_STATUS_ERROR,
+  SC16IS750_RECEIVE_TIMEOUT_INTERRUPT,
+  SC16IS750_RHR_INTERRUPT,
+  SC16IS750_THR_INTERRUPT,
+  SC16IS750_MODEM_INTERRUPT,
+  SC16IS750_INPUT_PIN_CHANGE_STATE,
+  SC16IS750_RECEIVE_XOFF,
+  SC16IS750_CTS_RTS_CHANGE
+};
 
 //Application Related 
 
@@ -115,6 +127,7 @@ typedef struct {
   void    SC16IS750_flush(SC16IS750_t * dev, uint8_t channel);
   uint8_t SC16IS750_GPIOGetPortState(SC16IS750_t * dev);
   uint8_t SC16IS750_InterruptPendingTest(SC16IS750_t * dev, uint8_t channel);
+	int16_t SC16IS750_InterruptEventTest(SC16IS750_t * dev, uint8_t channel);
   void    SC16IS750_SetPinInterrupt(SC16IS750_t * dev, uint8_t io_int_ena);
   void    SC16IS750_InterruptControl(SC16IS750_t * dev, uint8_t channel, uint8_t int_ena);
   void    SC16IS750_ModemPin(SC16IS750_t * dev, uint8_t gpio); //gpio == 0, gpio[7:4] are modem pins, gpio == 1 gpio[7:4] are gpios
@@ -132,7 +145,6 @@ typedef struct {
   void    SC16IS750_GPIOSetPortState(SC16IS750_t * dev, uint8_t port_state);
   void    SC16IS750_ResetDevice(SC16IS750_t * dev);
   
-  void    SC16IS750_isr(SC16IS750_t * dev, uint8_t channel);
   void    SC16IS750_FIFOEnable(SC16IS750_t * dev, uint8_t channel, uint8_t fifo_enable);
   void    SC16IS750_FIFOReset(SC16IS750_t * dev, uint8_t channel, uint8_t rx_fifo);
   void    SC16IS750_FIFOSetTriggerLevel(SC16IS750_t * dev, uint8_t channel, uint8_t rx_fifo, uint8_t length);
