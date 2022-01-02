@@ -15,41 +15,21 @@ SC16IS750/752 Driver for RaspberryPi
 #include <wiringPiI2C.h>
 #include "sc16is750.h"
 
-
-
-
-void SC16IS750_init(SC16IS750_t * dev, uint8_t protocol, uint8_t addr_sspin)
+void SC16IS750_init(SC16IS750_t * dev, uint8_t protocol, uint8_t address, int channels)
 {
 	dev->protocol = protocol;
 	if ( dev->protocol == SC16IS750_PROTOCOL_I2C ) {
-		//dev->device_address_i2c = (addr_sspin>>1);
-		dev->device_address_i2c = addr_sspin;
+		//dev->device_address_i2c = (address>>1);
+		dev->device_address_i2c = address;
 	} else {
-		dev->device_address_sspin = addr_sspin;
+		dev->device_address_sspin = address;
 	}
 	dev->peek_flag = 0;
-	//timeout = 1000;
+	dev->channels = channels;
+	//dev->timeout = 1000;
 }
 
-void SC16IS750_begin(SC16IS750_t * dev, uint32_t baud, long crystal_freq)
-{
-	dev->crystal_freq = crystal_freq;
-	if ( dev->protocol == SC16IS750_PROTOCOL_I2C) {
-		dev->i2c_fd = wiringPiI2CSetup(dev->device_address_i2c);
-	} else {
-		pinMode(dev->device_address_sspin, OUTPUT);
-		digitalWrite(dev->device_address_sspin, HIGH);
-		dev->spi_channel = 0;
-		wiringPiSPISetup(dev->spi_channel, 4*1000*1000);
-		digitalWrite(dev->device_address_sspin, LOW);
-	};
-	SC16IS750_ResetDevice(dev);
-	SC16IS750_FIFOEnable(dev, SC16IS750_CHANNEL, 1);
-	SC16IS750_SetBaudrate(dev, SC16IS750_CHANNEL, baud);
-	SC16IS750_SetLine(dev, SC16IS750_CHANNEL, 8, 0, 1);
-}
-
-void SC16IS752_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long crystal_freq)
+void SC16IS750_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long crystal_freq)
 {
 	dev->crystal_freq = crystal_freq;
 	if ( dev->protocol == SC16IS750_PROTOCOL_I2C) {
@@ -61,12 +41,14 @@ void SC16IS752_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long c
 		wiringPiSPISetup(dev->spi_channel, 4*1000*1000);
 	};
 	SC16IS750_ResetDevice(dev);
-	SC16IS750_FIFOEnable(dev, SC16IS752_CHANNEL_A, 1);
-	SC16IS750_FIFOEnable(dev, SC16IS752_CHANNEL_B, 1);
-	SC16IS750_SetBaudrate(dev, SC16IS752_CHANNEL_A, baud_A);
-	SC16IS750_SetBaudrate(dev, SC16IS752_CHANNEL_B, baud_B);
-	SC16IS750_SetLine(dev, SC16IS752_CHANNEL_A, 8, 0, 1);
-	SC16IS750_SetLine(dev, SC16IS752_CHANNEL_B, 8, 0, 1);
+	SC16IS750_FIFOEnable(dev, SC16IS750_CHANNEL_A, 1);
+	SC16IS750_SetBaudrate(dev, SC16IS750_CHANNEL_A, baud_A);
+	SC16IS750_SetLine(dev, SC16IS750_CHANNEL_A, 8, 0, 1);
+	if (dev->channels == SC16IS750_DUAL_CHANNEL) {
+		SC16IS750_FIFOEnable(dev, SC16IS750_CHANNEL_B, 1);
+		SC16IS750_SetBaudrate(dev, SC16IS750_CHANNEL_B, baud_B);
+		SC16IS750_SetLine(dev, SC16IS750_CHANNEL_B, 8, 0, 1);
+	}
 }
 
 int SC16IS750_available(SC16IS750_t * dev, uint8_t channel)
@@ -264,14 +246,14 @@ void SC16IS750_GPIOSetPinMode(SC16IS750_t * dev, uint8_t pin_number, uint8_t i_o
 {
 	uint8_t temp_iodir;
 
-	temp_iodir = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR);
+	temp_iodir = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IODIR);
 	if ( i_o == OUTPUT ) {
 		temp_iodir |= (0x01 << pin_number);
 	} else {
 		temp_iodir &= (uint8_t)~(0x01 << pin_number);
 	}
 
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR, temp_iodir);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IODIR, temp_iodir);
 	return;
 }
 
@@ -279,14 +261,14 @@ void SC16IS750_GPIOSetPinState(SC16IS750_t * dev, uint8_t pin_number, uint8_t pi
 {
 	uint8_t temp_iostate;
 
-	temp_iostate = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
+	temp_iostate = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
 	if ( pin_state == 1 ) {
 		temp_iostate |= (0x01 << pin_number);
 	} else {
 		temp_iostate &= (uint8_t)~(0x01 << pin_number);
 	}
 
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, temp_iostate);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, temp_iostate);
 	return;
 }
 
@@ -295,7 +277,7 @@ uint8_t SC16IS750_GPIOGetPinState(SC16IS750_t * dev, uint8_t pin_number)
 {
 	uint8_t temp_iostate;
 
-	temp_iostate = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
+	temp_iostate = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
 	if ( ( temp_iostate & (0x01 << pin_number) ) == 0 ) {
 		return 0;
 	}
@@ -305,25 +287,25 @@ uint8_t SC16IS750_GPIOGetPinState(SC16IS750_t * dev, uint8_t pin_number)
 uint8_t SC16IS750_GPIOGetPortState(SC16IS750_t * dev)
 {
 
-	return SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
+	return SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
 
 }
 
 void SC16IS750_GPIOSetPortMode(SC16IS750_t * dev, uint8_t port_io)
 {
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IODIR, port_io);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IODIR, port_io);
 	return;
 }
 
 void SC16IS750_GPIOSetPortState(SC16IS750_t * dev, uint8_t port_state)
 {
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, port_state);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOSTATE, port_state);
 	return;
 }
 
 void SC16IS750_SetPinInterrupt(SC16IS750_t * dev, uint8_t io_int_ena)
 {
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOINTENA, io_int_ena);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOINTENA, io_int_ena);
 	return;
 }
 
@@ -331,9 +313,9 @@ void SC16IS750_ResetDevice(SC16IS750_t * dev)
 {
 	uint8_t reg;
 
-	reg = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
+	reg = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
 	reg |= 0x08;
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, reg);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, reg);
 
 	return;
 }
@@ -342,13 +324,13 @@ void SC16IS750_ModemPin(SC16IS750_t * dev, uint8_t gpio) //gpio == 0, gpio[7:4] 
 {
 	uint8_t temp_iocontrol;
 
-	temp_iocontrol = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
+	temp_iocontrol = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
 	if ( gpio == 0 ) {
 		temp_iocontrol |= 0x02;
 	} else {
 		temp_iocontrol &= 0xFD;
 	}
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
 
 	return;
 }
@@ -357,13 +339,13 @@ void SC16IS750_GPIOLatch(SC16IS750_t * dev, uint8_t latch)
 {
 	uint8_t temp_iocontrol;
 
-	temp_iocontrol = SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
+	temp_iocontrol = SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL);
 	if ( latch == 0 ) {
 		temp_iocontrol &= 0xFE;
 	} else {
 		temp_iocontrol |= 0x01;
 	}
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_BOTH, SC16IS750_REG_IOCONTROL, temp_iocontrol);
 
 	return;
 }
@@ -540,13 +522,13 @@ void SC16IS750_EnableTransmit(SC16IS750_t * dev, uint8_t channel, uint8_t tx_ena
 
 uint8_t SC16IS750_ping(SC16IS750_t * dev)
 {
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_A, SC16IS750_REG_SPR, 0x55);
-	if (SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_A, SC16IS750_REG_SPR) !=0x55) {
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_A, SC16IS750_REG_SPR, 0x55);
+	if (SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_A, SC16IS750_REG_SPR) !=0x55) {
 		return 0;
 	}
 
-	SC16IS750_WriteRegister(dev, SC16IS752_CHANNEL_A, SC16IS750_REG_SPR, 0xAA);
-	if (SC16IS750_ReadRegister(dev, SC16IS752_CHANNEL_A, SC16IS750_REG_SPR) !=0xAA) {
+	SC16IS750_WriteRegister(dev, SC16IS750_CHANNEL_A, SC16IS750_REG_SPR, 0xAA);
+	if (SC16IS750_ReadRegister(dev, SC16IS750_CHANNEL_A, SC16IS750_REG_SPR) !=0xAA) {
 		return 0;
 	}
 
@@ -559,47 +541,40 @@ void SC16IS750_setTimeout(SC16IS750_t * dev, uint32_t time_out)
 	dev->timeout = time_out;
 }
 
-size_t SC16IS750_readBytes(SC16IS750_t * dev, char *buffer, size_t length)
+size_t SC16IS750_readBytes(SC16IS750_t * dev, uint8_t channel, char *buffer, size_t length)
 {
 	size_t count=0;
 	int16_t tmp;
+	uint8_t _channel;
 
 	while (count < length) {
-		tmp = SC16IS750_readwithtimeout(dev);
+		tmp = SC16IS750_readwithtimeout(dev, &_channel);
 		if (tmp < 0) {
 			break;
 		}
-		*buffer++ = (char)tmp;
-		count++;
+		if (_channel == channel) {
+			*buffer++ = (char)tmp;
+			count++;
+		}
 	}
 
 	return count;
 }
 
-int16_t SC16IS750_readwithtimeout(SC16IS750_t * dev)
+int16_t SC16IS750_readwithtimeout(SC16IS750_t * dev, uint8_t * channel)
 {
 	int16_t tmp;
 	uint32_t time_stamp;
 	time_stamp = millis();
 	do {
-		tmp = SC16IS750_read(dev, SC16IS750_CHANNEL);
+		*channel = SC16IS750_CHANNEL_A;
+		tmp = SC16IS750_read(dev, SC16IS750_CHANNEL_A);
 		if (tmp >= 0) return tmp;
-	} while(millis() - time_stamp < dev->timeout);
-	return -1;	 // -1 indicates timeout
-}
-
-int16_t SC16IS752_readwithtimeout(SC16IS750_t * dev, uint8_t * channel)
-{
-	int16_t tmp;
-	uint32_t time_stamp;
-	time_stamp = millis();
-	do {
-		*channel = SC16IS752_CHANNEL_A;
-		tmp = SC16IS750_read(dev, SC16IS752_CHANNEL_A);
-		if (tmp >= 0) return tmp;
-		*channel = SC16IS752_CHANNEL_B;
-		tmp = SC16IS750_read(dev, SC16IS752_CHANNEL_B);
-		if (tmp >= 0) return tmp;
+		if (dev->channels == SC16IS750_DUAL_CHANNEL) {
+			*channel = SC16IS750_CHANNEL_B;
+			tmp = SC16IS750_read(dev, SC16IS750_CHANNEL_B);
+			if (tmp >= 0) return tmp;
+		}
 	} while(millis() - time_stamp < dev->timeout);
 	return -1;	 // -1 indicates timeout
 }

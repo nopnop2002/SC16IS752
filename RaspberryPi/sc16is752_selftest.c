@@ -22,11 +22,11 @@ int main(int argc, char **argv){
 	if (strcmp(argv[1], "I2C") == 0) {
 		long i2c_address = strtol(argv[2], NULL, 16);
 		printf("i2c_addressr=0x%x\n", (uint8_t)i2c_address);
-		SC16IS750_init(&dev, SC16IS750_PROTOCOL_I2C, (uint8_t)i2c_address);
+		SC16IS750_init(&dev, SC16IS750_PROTOCOL_I2C, (uint8_t)i2c_address, SC16IS750_DUAL_CHANNEL);
 	} else if (strcmp(argv[1], "SPI") == 0) {
 		long chip_select = strtol(argv[2], NULL, 10);
 		printf("chip_select=%ld\n", chip_select);
-		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select);
+		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select, SC16IS750_DUAL_CHANNEL);
 	} else {
 		printf("USAGE:\n");
 		printf("\t%s I2C i2c_address : For I2C\n", argv[0]);
@@ -40,8 +40,8 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
-	// SC16IS752 Initialization
-	SC16IS752_begin(&dev, SC16IS750_DEFAULT_SPEED, SC16IS750_DEFAULT_SPEED, 1843200UL); //baudrate&frequency setting
+	// SC16IS750 Initialization
+	SC16IS750_begin(&dev, SC16IS750_DEFAULT_SPEED, SC16IS750_DEFAULT_SPEED, 1843200UL); //baudrate&frequency setting
 	if (SC16IS750_ping(&dev)!=1) {
 		printf("device not found\n");
 		return 1;
@@ -52,27 +52,27 @@ int main(int argc, char **argv){
 
 
 	while(1) {
-		SC16IS750_write(&dev, SC16IS752_CHANNEL_A, 0x55);
+		SC16IS750_write(&dev, SC16IS750_CHANNEL_A, 0x55);
 		delay(10);
-		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_B)==0) {
+		if (SC16IS750_available(&dev, SC16IS750_CHANNEL_B)==0) {
 			printf("serial communication error 1\n");
 			break;
 		}
 
-		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_B)!=0x55) {
+		if (SC16IS750_read(&dev, SC16IS750_CHANNEL_B)!=0x55) {
 			printf("serial communication error 2\n");
 			break;
 		}	
 		delay(200);
 
-		SC16IS750_write(&dev, SC16IS752_CHANNEL_B, 0xAA);
+		SC16IS750_write(&dev, SC16IS750_CHANNEL_B, 0xAA);
 		delay(10);
-		if (SC16IS750_available(&dev, SC16IS752_CHANNEL_A)==0) {
+		if (SC16IS750_available(&dev, SC16IS750_CHANNEL_A)==0) {
 			printf("serial communication error 3\n");
 			break;
 		}
 
-		if (SC16IS750_read(&dev, SC16IS752_CHANNEL_A)!=0xAA) {
+		if (SC16IS750_read(&dev, SC16IS750_CHANNEL_A)!=0xAA) {
 			printf("serial communication error 4\n");
 			break;
 		}	
