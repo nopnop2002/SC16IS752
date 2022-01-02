@@ -356,35 +356,36 @@ uint8_t SC16IS752::InterruptPendingTest(uint8_t channel)
 	return (ReadRegister(channel,SC16IS750_REG_IIR) & 0x01);
 }
 
-void SC16IS752::__isr(uint8_t channel)
+int SC16IS752::InterruptEventTest(uint8_t channel)
 {
 	uint8_t irq_src;
 
 	irq_src = ReadRegister(channel, SC16IS750_REG_IIR);
-	irq_src = (irq_src >> 1);
-	irq_src &= 0x3F;
+	//irq_src = (irq_src >> 1);
+	//irq_src &= 0x3F;
+	irq_src &= 0x3E;
 
 	switch (irq_src) {
 		case 0x06:			//Receiver Line Status Error
-			break;
+			return SC16IS750_RECEIVE_LINE_STATUS_ERROR;
 		case 0x0c:			//Receiver time-out interrupt
-			break;
+			return SC16IS750_RECEIVE_TIMEOUT_INTERRUPT;
 		case 0x04:			//RHR interrupt
-			break;
+			return SC16IS750_RHR_INTERRUPT;
 		case 0x02:			//THR interrupt
-			break;
+			return SC16IS750_THR_INTERRUPT;
 		case 0x00:			//modem interrupt;
-			break;
+			return SC16IS750_MODEM_INTERRUPT;
 		case 0x30:			//input pin change of state
-			break;
+			return SC16IS750_INPUT_PIN_CHANGE_STATE;
 		case 0x10:			//XOFF
-			break;
+			return SC16IS750_RECEIVE_XOFF;
 		case 0x20:			//CTS,RTS
-			break;
+			return SC16IS750_CTS_RTS_CHANGE;
 		default:
-			break;
+			return -1;
 	}
-	return;
+	return -1;
 }
 
 void SC16IS752::FIFOEnable(uint8_t channel, uint8_t fifo_enable)

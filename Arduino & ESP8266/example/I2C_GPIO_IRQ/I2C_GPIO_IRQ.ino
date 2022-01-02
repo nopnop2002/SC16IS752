@@ -25,10 +25,10 @@ void setup()
   // UART to Serial Bridge Initialization
   i2cuart.begin(9600, 9600);               //baudrate setting
   if (i2cuart.ping()!=1) {
-      Serial.println("Device not found");
-      while(1);
+    Serial.println("Device not found");
+    while(1);
   } else {
-      Serial.println("Device found");
+    Serial.println("Device found");
   }
 
   attachInterrupt(0, func, CHANGE);
@@ -45,9 +45,16 @@ void loop()
   //Serial.println(irq);
 
   if (isInterrupt) {
-    uint8_t gpio = i2cuart.GPIOGetPortState();
-    Serial.print("gpio = ");
-    Serial.println(gpio,HEX);
+    uint8_t event = i2cuart.InterruptEventTest(SC16IS752_CHANNEL_BOTH);
+    Serial.print("event=");
+    Serial.print(event);
+    Serial.println();
+
+    if (event == SC16IS750_INPUT_PIN_CHANGE_STATE) {
+      uint8_t gpio = i2cuart.GPIOGetPortState();
+      Serial.print("gpio=0x");
+      Serial.println(gpio,HEX);
+    }
     isInterrupt = false;
   }
   delay(1);

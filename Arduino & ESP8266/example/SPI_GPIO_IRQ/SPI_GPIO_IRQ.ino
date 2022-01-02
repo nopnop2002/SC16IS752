@@ -18,10 +18,12 @@ SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS);
 //Pin 6 should be connected to CS of the module.
 //Pin 2 should be connected to IRQ of the module.
 
+bool isInterrupt =false;
+
 void func() {
-  uint8_t gpio = spiuart.GPIOGetPortState();
-  Serial.print("gpio = ");
-  Serial.println(gpio,HEX);
+  //Serial.println("func");
+  isInterrupt = true;
+
 }
 
 void setup() 
@@ -31,10 +33,10 @@ void setup()
   // UART to Serial Bridge Initialization
   spiuart.begin(SC16IS752_DEFAULT_SPEED, SC16IS752_DEFAULT_SPEED); //baudrate setting
   if (spiuart.ping()!=1) {
-      Serial.println("Device not found");
-      while(1);
+    Serial.println("Device not found");
+    while(1);
   } else {
-      Serial.println("Device found");
+    Serial.println("Device found");
   }
 
   attachInterrupt(0, func, CHANGE);
@@ -50,5 +52,18 @@ void loop()
   //Serial.print("irq=");
   //Serial.println(irq);
   
+  if (isInterrupt) {
+    uint8_t event = spiuart.InterruptEventTest(SC16IS752_CHANNEL_BOTH);
+    Serial.print("event=");
+    Serial.print(event);
+    Serial.println();
+
+    if (event == SC16IS750_INPUT_PIN_CHANGE_STATE) {
+      uint8_t gpio = spiuart.GPIOGetPortState();
+      Serial.print("gpio=0x");
+      Serial.println(gpio,HEX);
+    }
+    isInterrupt = false;
+  }
   delay(1);
 }
