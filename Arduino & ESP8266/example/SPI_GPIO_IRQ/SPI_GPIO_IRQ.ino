@@ -18,7 +18,7 @@ SC16IS752 spiuart = SC16IS752(SC16IS750_PROTOCOL_SPI,CS);
 //Pin 6 should be connected to CS of the module.
 //Pin 2 should be connected to IRQ of the module.
 
-bool isInterrupt =false;
+bool isInterrupt = false;
 
 void func() {
   //Serial.println("func");

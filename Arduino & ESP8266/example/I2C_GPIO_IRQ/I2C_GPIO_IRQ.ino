@@ -9,7 +9,7 @@ SC16IS752 i2cuart = SC16IS752(SC16IS750_PROTOCOL_I2C,SC16IS750_ADDRESS_AA);
 
 //Pin 2 should be connected to IRQ of the module.
 
-bool isInterrupt =false;
+bool isInterrupt = false;
 
 void func() {
   //Serial.println("func");
