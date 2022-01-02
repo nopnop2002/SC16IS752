@@ -27,6 +27,7 @@ SC16IS750/752 Driver for RaspberryPi
 The SC16IS750 breakout board is equipped with a MIC5219 LG33 voltage regulator, which provides 3.3V to the chip.   
 The SC16IS752 breakout board is equipped with a AMS1117-3.3 voltage regulator, which provides 3.3V to the chip.   
 Therefore, the level of i2c is 3.3V, but all pins are 5V tolerant.   
+It can be used with either 3.3V MPU or 5V MPU.   
 
 (*2)i2c address selection   
 |A0|A1|Address|
@@ -60,4 +61,5 @@ Therefore, the level of i2c is 3.3V, but all pins are 5V tolerant.
 The SC16IS750 breakout board is equipped with a MIC5219 LG33 voltage regulator, which provides 3.3V to the chip.   
 The SC16IS752 breakout board is equipped with a AMS1117-3.3 voltage regulator, which provides 3.3V to the chip.   
 Therefore, the level of SPI is 3.3V, but all pins are 5V tolerant.   
+It can be used with either 3.3V MPU or 5V MPU.   
 
