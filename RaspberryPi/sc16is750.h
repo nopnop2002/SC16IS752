@@ -127,7 +127,7 @@ typedef struct {
   void    SC16IS750_flush(SC16IS750_t * dev, uint8_t channel);
   uint8_t SC16IS750_GPIOGetPortState(SC16IS750_t * dev);
   uint8_t SC16IS750_InterruptPendingTest(SC16IS750_t * dev, uint8_t channel);
-	int16_t SC16IS750_InterruptEventTest(SC16IS750_t * dev, uint8_t channel);
+  int16_t SC16IS750_InterruptEventTest(SC16IS750_t * dev, uint8_t channel);
   void    SC16IS750_SetPinInterrupt(SC16IS750_t * dev, uint8_t io_int_ena);
   void    SC16IS750_InterruptControl(SC16IS750_t * dev, uint8_t channel, uint8_t int_ena);
   void    SC16IS750_ModemPin(SC16IS750_t * dev, uint8_t gpio); //gpio == 0, gpio[7:4] are modem pins, gpio == 1 gpio[7:4] are gpios
