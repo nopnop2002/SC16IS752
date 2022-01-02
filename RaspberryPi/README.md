@@ -1,5 +1,13 @@
 # Software requirements
 - WiringPi Library   
+ This project uses the wiringPiSetup() function to initialize GPIO.   
+ So, GPIO number is the Wiring Pi number.   
+ If you use it on a board other than the RPI board, you may need to change GPIO number.   
+ As far as I know, there are these libraries.   
+	- WiringPi for OrangePi   
+	- WiringPi for BananaPi   
+	- WiringPi for NanoPi   
+	- WiringPi for Pine-64   
 
 # SC16IS750 Driver for RaspberryPi
 SC16IS750 has a single channel UART and eight GPIOs.   
