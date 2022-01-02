@@ -264,7 +264,7 @@ sudo ./sc16is752_gpio SPI {chip_select_gpio} 0
 ## sc16is752_gpio_irq
 Input interrupt using push switch.   
 The IRQ needs to be pulled up with an external resistor because the PCB pattern is wrong.   
-Connect the IRQ to PIN #10 (GPIO15).
+Connect the IRQ to PIN #10 (GPIO15).   
 Connect GPIO0 to the Push Switch.   
 
 ```
