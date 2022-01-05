@@ -146,7 +146,7 @@ sudo ./sc16is750_receiver_timeout SPI {chip_select_gpio} {baudrate}
 
 ## sc16is750_echo
 Converts the entered characters from uppercase to lowercase and from lowercase to uppercase and sends them back.   
-```abcdABCD-->ABCDabcd```
+```abcdABCD-->ABCDabcd```   
 Connect RX and other computer TX at any baud rate.   
 Connect TX and other computer RX at any baud rate.   
 Connect Gnd of Raspberry Pi and Gnd of other computer.   
@@ -308,7 +308,7 @@ sudo ./sc16is752_receiver_timeout SPI {chip_select_gpio} {channelA_baudrate} {ch
 
 ## sc16is752_echo
 Converts the entered characters from uppercase to lowercase and from lowercase to uppercase and sends them back.   
-```abcdABCD-->ABCDabcd```
+```abcdABCD-->ABCDabcd```   
 Connect RX of ChannelA and other computer TX at any baud rate.   
 Connect TX of ChannelA and other computer RX at any baud rate.   
 Connect RX of ChannelB and other computer TX at any baud rate.   
