@@ -63,3 +63,28 @@ The SC16IS752 breakout board is equipped with a AMS1117-3.3 voltage regulator, w
 Therefore, the level of SPI is 3.3V, but all pins are 5V tolerant.   
 It can be used with either 3.3V MPU or 5V MPU.   
 
+# Baudrate generator
+SC16IS750/752 has baud rate generator.   
+Since the communication speed is used by dividing the frequency of the crystal, an error may occur depending on the communication speed.   
+How to divide is described in the data sheet, but for example, using a 3.072MHz crystal,   
+When setting the communication speed of 3600bps, it is necessary to divide the frequency of the crystal by 53.3333,   
+Since such a value cannot be set in the register, sets 54 in the register.   
+As a result, the actual communication speed will be 3555bps.   
+This calculation can be calculated by the following formula.   
+```
+#include <stdio.h>
+void main() {
+  long crystal_freq = 3072000; // 3,072,000MHz
+  long prescaler = 1;
+  long baudrate = 3600;
+  long divisor1 = crystal_freq/prescaler;
+  long divisor2 = baudrate*16;
+  double divisorf = (double)divisor1/(double)divisor2;
+  long divisor = divisorf + 0.999;
+  printf("divisor1=%ld divisor2=%ld divisor=%ld divisorf=%f\n",
+    divisor1, divisor2, divisor, divisorf);
+
+  long actual_baudrate = (divisor1/divisor)/16;
+  printf("actual_baudrate=%ld\n", actual_baudrate);
+}
+```
