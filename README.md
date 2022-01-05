@@ -70,7 +70,7 @@ How to divide is described in the data sheet, but for example, using a 3.072MHz 
 When setting the communication speed of 3600bps, it is necessary to divide the frequency of the crystal by 53.3333,   
 Since such a value cannot be set in the register, sets 54 in the register.   
 As a result, the actual communication speed will be 3555bps.   
-This calculation can be calculated by the following formula.   
+This calculation can be calculated with the following code.   
 ```
 #include <stdio.h>
 void main() {
