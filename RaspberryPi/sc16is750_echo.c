@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <wiringPi.h>
 #include "sc16is750.h"
 
@@ -18,11 +19,11 @@ int main(int argc, char **argv){
 	if (strcmp(argv[1], "I2C") == 0) {
 		long i2c_address = strtol(argv[2], NULL, 16);
 		printf("i2c_addressr=0x%x\n", (uint8_t)i2c_address);
-		SC16IS750_init(&dev, SC16IS750_PROTOCOL_I2C, (uint8_t)i2c_address, SC16IS750_SINGLE_CHANNEL);
+		SC16IS750_init(&dev, SC16IS750_PROTOCOL_I2C, (uint8_t)i2c_address, SC16IS750_DUAL_CHANNEL);
 	} else if (strcmp(argv[1], "SPI") == 0) {
 		long chip_select = strtol(argv[2], NULL, 10);
 		printf("chip_select=%ld\n", chip_select);
-		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select, SC16IS750_SINGLE_CHANNEL);
+		SC16IS750_init(&dev, SC16IS750_PROTOCOL_SPI, (uint8_t)chip_select, SC16IS750_DUAL_CHANNEL);
 	} else {
 		printf("USAGE:\n");
 		printf("\t%s I2C i2c_address baudrate : For I2C\n", argv[0]);
@@ -52,25 +53,32 @@ int main(int argc, char **argv){
 	char buffer[64] = {0};
 	int index = 0;
 
-	SC16IS750_setTimeout(&dev, 500);
-
-	int16_t c;
-	uint8_t channel;
+	char c;
 	while(1) {
-		c = SC16IS750_readwithtimeout(&dev, &channel);
+		if (SC16IS750_available(&dev, SC16IS750_CHANNEL)) {
+			c = SC16IS750_read(&dev, SC16IS750_CHANNEL);
 #if 0
-		printf("SC16IS750_readwithtimeout=%d\n", c);
+			if (c < 0x20) {
+				printf("c= (0x%02x)\n",c);
+			} else {
+				printf("c=%c(0x%02x)\n",c,c);
+			}
 #endif
-		if (c != -1) {
 			if (index < sizeof(buffer)-1) {
-				buffer[index++] = c;
+				if (isupper(c)) {
+					buffer[index++] = tolower(c);
+				} else {
+					buffer[index++] = toupper(c);
+				}
 				buffer[index] = 0;
 			}
 		} else {
-			printf("[%s]\n",buffer);
+			for (int i=0;i<index;i++) {
+				SC16IS750_write(&dev, SC16IS750_CHANNEL, buffer[i]);
+			}
 			index = 0;
-			buffer[0] = 0;
-		}
+		} // end CHANNEL
+
 	} // end while
 }
 

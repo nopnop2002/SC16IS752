@@ -7,7 +7,7 @@ SC16IS750/752 Driver for RaspberryPi
 
 #include <stdio.h>	
 #include <stdint.h>
-#include <stdbool.h>  
+#include <stdbool.h>	
 #include <stdlib.h>  
 #include <string.h>
 #include <wiringPi.h>
@@ -38,7 +38,8 @@ void SC16IS750_begin(SC16IS750_t * dev, uint32_t baud_A, uint32_t baud_B, long c
 		pinMode(dev->device_address_sspin, OUTPUT);
 		digitalWrite(dev->device_address_sspin, HIGH);
 		dev->spi_channel = 0;
-		wiringPiSPISetup(dev->spi_channel, 4*1000*1000);
+		wiringPiSPISetup(dev->spi_channel, 4*1000*1000); // 4MHz
+		//wiringPiSPISetup(dev->spi_channel, 1*1000*1000); // 1MHz
 	};
 	SC16IS750_ResetDevice(dev);
 	SC16IS750_FIFOEnable(dev, SC16IS750_CHANNEL_A, 1);
@@ -83,7 +84,7 @@ void SC16IS750_digitalWrite(SC16IS750_t * dev, uint8_t pin, uint8_t value)
 
 uint8_t SC16IS750_digitalRead(SC16IS750_t * dev, uint8_t pin)
 {
-   return SC16IS750_GPIOGetPinState(dev, pin);
+	return SC16IS750_GPIOGetPinState(dev, pin);
 }
 
 
@@ -154,7 +155,10 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 		printf("This baudrate (%d) is not support\n",baudrate);
 		return 0;
 	}
-	divisor = divisor1/divisor2;
+	//divisor = divisor1/divisor2;
+	//divisor rounds up
+	double wk = (double)divisor1/(double)divisor2;
+	divisor = wk + 0.999;
 	//printf("baudrate=%d divisor=%d\n",baudrate,divisor);
 
 	temp_lcr = SC16IS750_ReadRegister(dev, channel, SC16IS750_REG_LCR);
@@ -167,15 +171,17 @@ int16_t SC16IS750_SetBaudrate(SC16IS750_t * dev, uint8_t channel, uint32_t baudr
 	temp_lcr &= 0x7F;
 	SC16IS750_WriteRegister(dev, channel, SC16IS750_REG_LCR, temp_lcr);
 
-
-	//actual_baudrate = (SC16IS750_CRYSTCAL_FREQ/prescaler)/(16*divisor);
-	divisor1 = dev->crystal_freq/prescaler;
-	//printf("divisor1=%d\n",divisor1);
-	divisor2 = 16*divisor;
-	//printf("divisor2=%d\n",divisor2);
-	//actual_baudrate = (dev->crystal_freq/prescaler)/(16*divisor);
+#if 0
 	actual_baudrate = divisor1 / divisor2;
 	error = ((float)actual_baudrate-baudrate)*1000/baudrate;
+#endif
+	actual_baudrate = (divisor1/divisor)/16;
+	error = baudrate - actual_baudrate;
+	//printf("actual_baudrate=%d error=%d\n", actual_baudrate, error);
+	if (error != 0) {
+		printf("Warning:baudrate=%d actual_baudrate=%d\n", baudrate, actual_baudrate);
+	}
+
 #ifdef	SC16IS750_DEBUG_PRINT
 	printf("Desired baudrate: ");
 	printf("%x\n", baudrate);
@@ -200,7 +206,7 @@ void SC16IS750_SetLine(SC16IS750_t * dev, uint8_t channel, uint8_t data_length, 
 	printf("LCR Register:0x");
 	printf("%x\n", temp_lcr);
 #endif
-	switch (data_length) {		  //data length settings
+	switch (data_length) { //data length settings
 	case 5:
 		break;
 	case 6:
@@ -480,9 +486,6 @@ void SC16IS750_WriteByte(SC16IS750_t * dev, uint8_t channel, uint8_t val)
 	} while ((tmp_lsr&0x20) ==0);
 
 	SC16IS750_WriteRegister(dev, channel, SC16IS750_REG_THR, val);
-
-
-
 }
 
 int SC16IS750_ReadByte(SC16IS750_t * dev, uint8_t channel)
@@ -594,7 +597,7 @@ int SC16IS750_peek(SC16IS750_t * dev, uint8_t channel)
 {
 	if ( dev->peek_flag == 0 ) {
 		dev->peek_buf = SC16IS750_ReadByte(dev, channel);
-		if (  dev->peek_buf >= 0 ) {
+		if ( dev->peek_buf >= 0 ) {
 			dev->peek_flag = 1;
 		}
 	}

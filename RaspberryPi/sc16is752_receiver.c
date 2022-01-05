@@ -70,13 +70,16 @@ int main(int argc, char **argv){
 			if (c == 0x0d) {
 	
 			} else if (c == 0x0a) {
-				printf("[%s]\n",buffer_A);
+				printf("[CH_A:%s]\n",buffer_A);
 				index_A = 0;
+				buffer_A[0] = 0;
 			} else {
-				buffer_A[index_A++] = c;
-				buffer_A[index_A] = 0;
+				if (index_A < sizeof(buffer_A)-1) {
+					buffer_A[index_A++] = c;
+					buffer_A[index_A] = 0;
+				}
 			}
-		}
+		} // end CHANNEL_A
 
 		if (SC16IS750_available(&dev, SC16IS750_CHANNEL_B)) {
 			c = SC16IS750_read(&dev, SC16IS750_CHANNEL_B);
@@ -90,13 +93,16 @@ int main(int argc, char **argv){
 			if (c == 0x0d) {
 	
 			} else if (c == 0x0a) {
-				printf("[%s]\n",buffer_B);
+				printf("[CH_B:%s]\n",buffer_B);
 				index_B = 0;
+				buffer_B[0] = 0;
 			} else {
-				buffer_B[index_B++] = c;
-				buffer_B[index_B] = 0;
+				if (index_B < sizeof(buffer_B)-1) {
+					buffer_B[index_B++] = c;
+					buffer_B[index_B] = 0;
+				}
 			}
-		}
-	}
+		} // end CHANNEL_B
+	} // end while
 }
 

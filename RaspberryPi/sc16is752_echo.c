@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <wiringPi.h>
 #include "sc16is750.h"
 
@@ -56,35 +57,55 @@ int main(int argc, char **argv){
 	char buffer_B[64] = {0};
 	int index_B = 0;
 
-	SC16IS750_setTimeout(&dev, 500);
-
-	int16_t c;
-	uint8_t channel;
+	char c;
 	while(1) {
-		c = SC16IS750_readwithtimeout(&dev, &channel);
+		if (SC16IS750_available(&dev, SC16IS750_CHANNEL_A)) {
+			c = SC16IS750_read(&dev, SC16IS750_CHANNEL_A);
 #if 0
-		printf("SC16IS750_readwithtimeout=%d %d\n", c, channel);
-#endif
-		if (c != -1) {
-			if (channel == SC16IS750_CHANNEL_A) {
-				if (index_A < sizeof(buffer_A)-1) {
-					buffer_A[index_A++] = c;
-					buffer_A[index_A] = 0;
-				}
+			if (c < 0x20) {
+				printf("c_A= (0x%02x)\n",c);
 			} else {
-				if (index_B < sizeof(buffer_B)-1) {
-					buffer_B[index_B++] = c;
-					buffer_B[index_B] = 0;
+				printf("c_A=%c(0x%02x)\n",c,c);
+			}
+#endif
+			if (index_A < sizeof(buffer_A)-1) {
+				if (isupper(c)) {
+					buffer_A[index_A++] = tolower(c);
+				} else {
+					buffer_A[index_A++] = toupper(c);
 				}
+				buffer_A[index_A] = 0;
 			}
 		} else {
-			printf("[CH_A:%s]\n",buffer_A);
+			for (int i=0;i<index_A;i++) {
+				SC16IS750_write(&dev, SC16IS750_CHANNEL_A, buffer_A[i]);
+			}
 			index_A = 0;
-			buffer_A[0] = 0;
-			printf("[CH_B:%s]\n",buffer_B);
+		} // end CHANNEL_A
+
+		if (SC16IS750_available(&dev, SC16IS750_CHANNEL_B)) {
+			c = SC16IS750_read(&dev, SC16IS750_CHANNEL_B);
+#if 0
+			if (c < 0x20) {
+				printf("c_B= (0x%02x)\n",c);
+			} else {
+				printf("c_B=%c(0x%02x)\n",c,c);
+			}
+#endif
+			if (index_B < sizeof(buffer_B)-1) {
+				if (isupper(c)) {
+					buffer_B[index_B++] = tolower(c);
+				} else {
+					buffer_B[index_B++] = toupper(c);
+				}
+				buffer_B[index_B] = 0;
+			}
+		} else {
+			for (int i=0;i<index_B;i++) {
+				SC16IS750_write(&dev, SC16IS750_CHANNEL_B, buffer_B[i]);
+			}
 			index_B = 0;
-			buffer_B[0] = 0;
-		}
+		} // end CHANNEL_B
 	} // end while
 }
 

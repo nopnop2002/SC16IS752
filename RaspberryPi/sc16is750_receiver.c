@@ -67,10 +67,13 @@ int main(int argc, char **argv){
 		} else if (c == 0x0a) {
 			printf("[%s]\n",buffer);
 			index = 0;
+			buffer[0] = 0;
 		} else {
-			buffer[index++] = c;
-			buffer[index] = 0;
+			if (index < sizeof(buffer)-1) {
+				buffer[index++] = c;
+				buffer[index] = 0;
+			}
 		}
-	}
+	} // end while
 }
 

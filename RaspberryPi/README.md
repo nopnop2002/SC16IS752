@@ -143,6 +143,55 @@ sudo ./sc16is750_receiver_timeout SPI {chip_select_gpio} {baudrate}
 ![sc16is750-spi-receive-timeout](https://user-images.githubusercontent.com/6020549/147734935-7b1b9de6-9fb7-41f4-8d65-1d667960fe99.jpg)
 
 ---
+
+## sc16is750_echo
+Converts the entered characters from uppercase to lowercase and from lowercase to uppercase and sends them back.   
+```abcdABCD-->ABCDabcd```
+Connect RX and other computer TX at any baud rate.   
+Connect TX and other computer RX at any baud rate.   
+Connect Gnd of Raspberry Pi and Gnd of other computer.   
+
+__Connections should be as short as possible.__
+
+### Sketch of the other side
+```
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(10, 11); // RX, TX
+
+#define baudrate 9600L
+
+long lastMsg = 0;
+
+void setup() {
+  Serial.begin(115200);
+  mySerial.begin(baudrate);
+}
+
+void loop() {
+  long now = millis();
+  if (now - lastMsg > 1000) {
+    lastMsg = now;
+    char buf[64];
+    sprintf(buf,"Hello Wold %ld, Baudrate is %ld", millis(), baudrate);
+    mySerial.println(buf);
+  }
+
+  if (mySerial.available() > 0) {
+    int data = mySerial.read();
+    Serial.write(data);
+    //Serial.println(data, HEX);
+  }  
+
+}
+```
+
+```
+sudo ./sc16is750_echo I2C {i2c_address} {baudrate}
+
+sudo ./sc16is750_echo SPI {chip_select_gpio} {baudrate}
+```
+
+---
 ## sc16is750_gpio
 
 Connect GPIO0 and LED.   
@@ -254,6 +303,26 @@ sudo ./sc16is752_receiver_timeout SPI {chip_select_gpio} {channelA_baudrate} {ch
 ![sc16is752-i2c-receive-timeout](https://user-images.githubusercontent.com/6020549/147802424-02d30db7-ad47-414c-bf0f-a03c27bc9f0e.jpg)
 
 ![sc16is752-spi-receive-timeout](https://user-images.githubusercontent.com/6020549/147802430-be628a31-88f3-4dac-a989-5c2b75fc34c4.jpg)
+
+---
+
+## sc16is752_echo
+Converts the entered characters from uppercase to lowercase and from lowercase to uppercase and sends them back.   
+```abcdABCD-->ABCDabcd```
+Connect RX of ChannelA and other computer TX at any baud rate.   
+Connect TX of ChannelA and other computer RX at any baud rate.   
+Connect RX of ChannelB and other computer TX at any baud rate.   
+Connect TX of ChannelB and other computer RX at any baud rate.   
+Connect Gnd of Raspberry Pi and Gnd of other computer.   
+
+__Connections should be as short as possible.__
+
+
+```
+sudo ./sc16is752_echo I2C {i2c_address} {channelA_baudrate} {channelB_baudrate}
+
+sudo ./sc16is752_echo SPI {chip_select_gpio} {channelA_baudrate} {channelB_baudrate}
+```
 
 ---
 
