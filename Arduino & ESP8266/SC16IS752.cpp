@@ -501,6 +501,21 @@ int SC16IS752::ReadByte(uint8_t channel)
 
 }
 
+void SC16IS752::EnableRs485(uint8_t channel, uint8_t invert)
+{
+	uint8_t temp_efcr;
+	temp_efcr = ReadRegister(channel, SC16IS750_REG_EFCR);
+	if ( invert == 0) {
+		temp_efcr |= 0x20;
+	} else {
+		temp_efcr |= 0x30;
+	}
+	WriteRegister(channel, SC16IS750_REG_EFCR,temp_efcr);
+
+	return;
+}
+
+
 void SC16IS752::EnableTransmit(uint8_t channel, uint8_t tx_enable)
 {
 	uint8_t temp_efcr;

@@ -131,7 +131,9 @@ class SC16IS752
     void    InterruptControl(uint8_t channel, uint8_t int_ena);
     void    ModemPin(uint8_t gpio); //gpio == 0, gpio[7:4] are modem pins, gpio == 1 gpio[7:4] are gpios
     void    GPIOLatch(uint8_t latch);
-    
+    void    EnableRs485(uint8_t channel, uint8_t invert);
+    void    EnableTransmit(uint8_t channel, uint8_t tx_enable);
+
   
   private:
     uint8_t  device_address_sspin;
@@ -158,7 +160,7 @@ class SC16IS752
     uint8_t FIFOAvailableSpace(uint8_t channel);
     void    WriteByte(uint8_t channel, uint8_t val);
     int     ReadByte(uint8_t channel);
-    void    EnableTransmit(uint8_t channel, uint8_t tx_enable);
+    //void    EnableTransmit(uint8_t channel, uint8_t tx_enable);
     int     peek_buf;
     uint8_t peek_flag;
     
