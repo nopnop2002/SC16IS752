@@ -28,8 +28,8 @@ void setup()
   Serial.println(baudrate_B);
 
   // Enable Auto RS-485 RTS control 
-  i2cuart.EnableRs485(SC16IS752_CHANNEL_A, 1);
-
+  i2cuart.EnableRs485(SC16IS752_CHANNEL_A, WITH_INVERT_RTS_SIGNAL);
+  i2cuart.EnableRs485(SC16IS752_CHANNEL_B, WITH_INVERT_RTS_SIGNAL);
 }
 
 void loop() 
