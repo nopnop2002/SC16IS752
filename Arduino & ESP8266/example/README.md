@@ -13,4 +13,4 @@
 - RS485_RECEIVE   
  Receive data from RS485.   
 - RS485_TRANSMITE   
- Transmite data to RS485..   
+ Transmite data to RS485.   
