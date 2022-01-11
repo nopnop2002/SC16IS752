@@ -1,4 +1,4 @@
-# I2C_ECHO
+# I2C_RS485_RECEIVE
 Receive data from RS485.   
 SC16IS752 have Auto RS-485 RTS control function.   
 The polarity of transmission and reception is switched automatically.   
