@@ -505,7 +505,7 @@ void SC16IS752::EnableRs485(uint8_t channel, uint8_t invert)
 {
 	uint8_t temp_efcr;
 	temp_efcr = ReadRegister(channel, SC16IS750_REG_EFCR);
-	if ( invert == 0) {
+	if ( invert == NO_INVERT_RTS_SIGNAL) {
 		temp_efcr |= 0x20;
 	} else {
 		temp_efcr |= 0x30;

@@ -90,6 +90,12 @@ enum SC16IS750_IIR {
 	SC16IS750_CTS_RTS_CHANGE
 };
 
+// Extra Features Control Register
+enum INVERT_RTS_SIGNAL {
+	NO_INVERT_RTS_SIGNAL,
+	WITH_INVERT_RTS_SIGNAL
+};
+
 //Application Related 
 
 //#define   SC16IS750_CRYSTCAL_FREQ (14745600UL) 
