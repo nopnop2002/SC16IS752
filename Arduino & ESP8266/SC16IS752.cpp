@@ -57,6 +57,11 @@ int SC16IS752::available(uint8_t channel)
 	return FIFOAvailableData(channel);
 }
 
+uint8_t SC16IS752::linestate(uint8_t channel)
+{
+	return ReadRegister(channel, SC16IS750_REG_LSR);
+}
+
 int SC16IS752::read(uint8_t channel)
 {
 	if ( peek_flag == 0) {

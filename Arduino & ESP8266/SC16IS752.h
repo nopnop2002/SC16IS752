@@ -120,6 +120,7 @@ class SC16IS752
     int     read(uint8_t channel);
     size_t  write(uint8_t channel, uint8_t val);
     int     available(uint8_t channel);
+    uint8_t linestate(uint8_t channel);
     void    pinMode(uint8_t pin, uint8_t io);
     void    digitalWrite(uint8_t pin, uint8_t value);
     uint8_t digitalRead(uint8_t pin);
