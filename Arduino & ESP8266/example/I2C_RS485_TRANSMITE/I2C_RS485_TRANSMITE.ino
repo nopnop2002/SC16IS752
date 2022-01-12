@@ -38,13 +38,30 @@ void loop()
   if (now - lastMsg > 1000) {
     lastMsg = now;
     char buf[64];
-    strcpy(buf,"0123456789");
+    sprintf(buf,"Hello Wold %ld, Baudrate is %d\r\n", millis(), baudrate_A);
+    //strcpy(buf,"0123456789");
     for (int i=0;i<strlen(buf);i++) {
       i2cuart.write(SC16IS752_CHANNEL_A, buf[i]);
     }
+    Serial.println("Wait for transmission to complete channel A");
+    while(1) {
+      uint8_t state = i2cuart.linestate(SC16IS752_CHANNEL_A);
+      if ( (state & 0x40) == 0x40) break; // THR and TSR empty.
+      Serial.print("channel A linestate is 0x");
+      Serial.println(state,HEX);
+    } // end while
+
+    sprintf(buf,"Hello Wold %ld, Baudrate is %l\r\n", millis(), baudrate_B);
     for (int i=0;i<strlen(buf);i++) {
       i2cuart.write(SC16IS752_CHANNEL_B, buf[i]);
     }
-  }
+    Serial.println("Wait for transmission to complete channel B");
+    while(1) {
+      uint8_t state = i2cuart.linestate(SC16IS752_CHANNEL_B);
+      if ( (state & 0x40) == 0x40) break; // THR and TSR empty.
+      Serial.print("channel B linestate is 0x");
+      Serial.println(state,HEX);
+    } // end while
+  } // end if
   delay(1000);
 }

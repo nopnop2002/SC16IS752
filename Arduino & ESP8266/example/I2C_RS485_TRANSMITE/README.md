@@ -34,20 +34,18 @@ SoftwareSerial mySerial(4, 5); // RX, TX
 
 void setup()
 {
-  mySerial.begin(115200);
-  mySerial.println("recv start");
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Serial.println("RS485 recv start");
+  mySerial.begin(9600);
   pinMode(TXDEN, OUTPUT);
   digitalWrite(TXDEN, LOW); // slave
 }
 
 void loop()
 {
-  while(Serial.available()){
-    byte inChar = (byte)Serial.read();
-    mySerial.print(millis());
-    mySerial.print(":");
-    mySerial.println(inChar, HEX);
+  while(mySerial.available()){
+    byte inChar = (byte)mySerial.read();
+    Serial.write(inChar);
   }
 }
 ```
