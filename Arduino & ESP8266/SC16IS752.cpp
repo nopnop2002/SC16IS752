@@ -281,7 +281,7 @@ uint8_t SC16IS752::GPIOGetPinState(uint8_t pin_number)
 	uint8_t temp_iostate;
 
 	temp_iostate = ReadRegister(SC16IS752_CHANNEL_BOTH, SC16IS750_REG_IOSTATE);
-	if ( temp_iostate & (0x01 << pin_number)== 0 ) {
+	if ( (temp_iostate & (0x01 << pin_number) ) == 0 ) {
 	  return 0;
 	}
 	return 1;
