@@ -38,6 +38,10 @@ It can be used with either 3.3V MPU or 5V MPU.
 |GND|GND|0x4D|
 
 (*3)Requires PullUp   
+How to change scl/sda.   
+https://github.com/nopnop2002/SC16IS752/issues/13   
+
+
 (*4)No Requires PullUp   
 
 ---
