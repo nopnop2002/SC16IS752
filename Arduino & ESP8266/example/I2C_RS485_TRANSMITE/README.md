@@ -24,7 +24,7 @@ RS485-BUS need terminator register.
 
 __Connections should be as short as possible__
 
-# Sketch of the other side
+# Sketch of the other side using atmega328
 ```
 #include <SoftwareSerial.h>
 

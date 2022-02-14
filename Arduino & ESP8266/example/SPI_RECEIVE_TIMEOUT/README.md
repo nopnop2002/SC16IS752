@@ -12,7 +12,7 @@ __Connections should be as short as possible__
 # Channel baudrate
 You can specify different baudrates for channel A and channel B
 
-# Sketch of the other side
+# Sketch of the other side using atmega328
 ```
 #define baudrate 9600L
 

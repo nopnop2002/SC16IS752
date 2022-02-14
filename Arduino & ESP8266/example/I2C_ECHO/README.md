@@ -10,7 +10,7 @@ __Connections should be as short as possible__
 # Channel baudrate
 You can specify different baudrates for channel A and channel B
 
-# Sketch of the other side
+# Sketch of the other side using atmega328
 ```
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(10, 11); // RX, TX
