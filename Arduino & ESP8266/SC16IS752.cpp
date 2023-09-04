@@ -75,6 +75,7 @@ int SC16IS752::read(uint8_t channel)
 size_t SC16IS752::write(uint8_t channel, uint8_t val)
 {
 	WriteByte(channel, val);
+	return 1;
 }
 
 void SC16IS752::pinMode(uint8_t pin, uint8_t i_o)
